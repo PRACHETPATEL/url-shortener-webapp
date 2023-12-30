@@ -1,6 +1,8 @@
 const express=require("express");
-const getProfile = require("../controller/user");
+const {getProfile,registerUser, loginUser} = require("../controller/user");
 const router=express.Router();
-router.route("/profile").get(getProfile);
+router.get("/profile",getProfile);
+router.post("/register",registerUser);
+router.post("/login",loginUser);
 
 module.exports=router;

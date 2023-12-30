@@ -1,6 +1,3 @@
-const { constants } = require("../constants");
-
-
 const errorHandler=(err,req,res,next)=>{
     const statusCode=res.statusCode?res.statusCode:500;
     switch(statusCode){
@@ -20,9 +17,9 @@ const errorHandler=(err,req,res,next)=>{
             res.render("error",{title:"Internal Server Error",message:err.message,stakeTrace:err.stack,d1:5,d2:0,d3:0});
             break;
         default:
+             res.render("error",{title:"Internal Server Error",message:err.message,stakeTrace:err.stack,d1:5,d2:0,d3:0});
             break;
     }
-   
    
 }
 module.exports=errorHandler;
