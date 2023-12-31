@@ -16,7 +16,15 @@ app.use(express.static(path.join(__dirname,"./public")));
 
 app.use("/api/url",urlRouter);
 app.use("/api/user",userRouter);
-app.use("/",redirectRouter)
+app.get("/home",(req,res)=>{
+    res.render("index",{age:20,name:"Prachet"});
+})
+app.use("/",redirectRouter);
+
+app.use((req, res, next) => {
+    res.status(404);
+    throw new Error("URL NOT FOUND");
+});
 app.use(errorHandler);
 
 app.listen(process.env.PORT,()=>{

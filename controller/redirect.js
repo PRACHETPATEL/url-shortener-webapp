@@ -8,6 +8,6 @@ const redirectURL=asyncHandler(async(req,res)=>{
         res.redirect(check.url);
         return;
     }
-    res.redirect("/");
+    res.redirect("/home");
 })
 module.exports=redirectURL;

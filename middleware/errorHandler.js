@@ -20,7 +20,7 @@ const errorHandler=(err,req,res,next)=>{
             break;
         default:
             console.log(err);
-             res.render("error",{title:"Internal Server Error",message:err.message,stakeTrace:err.stack,d1:5,d2:0,d3:0});
+            res.render("error",{title:"URL NOT FOUND!!",message:err.message,stakeTrace:err.stack,d1:4,d2:0,d3:4});
             break;
     }
    
