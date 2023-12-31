@@ -8,6 +8,7 @@ const logger=require("morgan");
 const errorHandler = require("./middleware/errorHandler");
 const connectDB = require("./db/connectDb");
 connectDB();
+app.set("view engine","ejs");
 app.use(express.json());
 app.use(logger("combined"));
 app.use(express.static(path.join(__dirname,"./public")));
