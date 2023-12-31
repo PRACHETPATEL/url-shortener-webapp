@@ -15,9 +15,11 @@ const errorHandler=(err,req,res,next)=>{
             res.render("error",{title:"Unauthorized",message:err.message,stakeTrace:err.stack,d1:4,d2:0,d3:1});
             break;
         case constants.SERVER_ERROR:
+            console.log(err);
             res.render("error",{title:"Internal Server Error",message:err.message,stakeTrace:err.stack,d1:5,d2:0,d3:0});
             break;
         default:
+            console.log(err);
              res.render("error",{title:"Internal Server Error",message:err.message,stakeTrace:err.stack,d1:5,d2:0,d3:0});
             break;
     }

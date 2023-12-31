@@ -7,6 +7,7 @@ require("dotenv").config()
 const logger=require("morgan");
 const errorHandler = require("./middleware/errorHandler");
 const connectDB = require("./db/connectDb");
+const redirectRouter = require("./routes/redirectRouter");
 connectDB();
 app.set("view engine","ejs");
 app.use(express.json());
@@ -15,7 +16,7 @@ app.use(express.static(path.join(__dirname,"./public")));
 
 app.use("/api/url",urlRouter);
 app.use("/api/user",userRouter);
-
+app.use("/",redirectRouter)
 app.use(errorHandler);
 
 app.listen(process.env.PORT,()=>{
