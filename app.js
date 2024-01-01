@@ -8,9 +8,11 @@ const logger=require("morgan");
 const errorHandler = require("./middleware/errorHandler");
 const connectDB = require("./db/connectDb");
 const redirectRouter = require("./routes/redirectRouter");
+const cookieParser = require('cookie-parser');
 connectDB();
 app.set("view engine","ejs");
 app.use(express.json());
+app.use(cookieParser())
 app.use(logger("combined"));
 app.use(express.static(path.join(__dirname,"./public")));
 
