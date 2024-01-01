@@ -12,14 +12,15 @@ const addUrl = asyncHandler(async (req, res) => {
   const check = await Url.findOne({ shortened_url: url })
   if (check || url.includes(`${req.protocol}://${req.get('host')}/`)) {
     console.log(check)
-    res.render('index', { status: 400, message: 'Url Already Shortened' })
+    res.json({ status: 400, message: 'Url Already Shortened' })
     return
   }
   try {
     if (urls.length >= 1 && urlRegex.test(url)) {
       const lasturl = urls[urls.length - 1]
       const code = lasturl.shortened_code_string
-      const shortenedcodestring = nextCombination(code)
+      const shortenedcodestring = nextCombination(code);
+      console.log(req.user);
       if (req.user === undefined) {
         urlobj = await Url.create({
           user_id: new mongoose.Types.ObjectId('5f6a6b7c8d9e1f2a3b4c5d6e'),
@@ -38,7 +39,7 @@ const addUrl = asyncHandler(async (req, res) => {
         })
       }
       res.status(201)
-      res.render('index', { message: 'URL Shortned', url: urlobj })
+      res.json({ message: 'URL Shortned', url: urlobj })
       return
     } else if (urls.length == 0 && urlRegex.test(url)) {
       if (req.user === undefined) {
@@ -60,11 +61,11 @@ const addUrl = asyncHandler(async (req, res) => {
         })
       }
       res.status(201)
-      res.render('index', { message: 'URL Shortned', url: urlobj })
+      res.json({ message: 'URL Shortned', url: urlobj })
       return
     } else {
       res.status(200)
-      res.render('index', { message: 'URL Format Not valid' })
+      res.json({ message: 'URL Format Not valid' })
       return
     }
   } catch (err) {
@@ -75,10 +76,10 @@ const getUnshortenUrl = asyncHandler(async (req, res) => {
   const { shorturl } = req.body
   const urlobj = await Url.findOne({ shortened_url: shorturl })
   if (urlobj) {
-    res.render('index', { message: 'URL Unshortened', url: urlobj.url })
+    res.json({ message: 'URL Unshortened', url: urlobj.url })
     return
   }
-  res.render('index', { status: 808, message: 'URL NOT FOUND' })
+  res.json({ status: 808, message: 'URL NOT FOUND' })
 })
 const deleteShortenUrl = asyncHandler(async (req, res) => {
   if (req.user === undefined) {
@@ -90,12 +91,12 @@ const deleteShortenUrl = asyncHandler(async (req, res) => {
     const urls = await Url.findByIdAndDelete(req.params.id)
     if (urls != null) {
         res.status(202)
-        res.render('index', { message: "URL's Deleted Successfully!!", urls: urls })
+        res.json({ message: "URL's Deleted Successfully!!", urls: urls })
         return
     }
   }
   res.status(202)
-  res.render('index', { message: 'URL Not Found!!' })
+  res.json({ message: 'URL Not Found!!' })
  
 })
 const updateShortenUrl = asyncHandler(async (req, res) => {
@@ -110,7 +111,7 @@ const updateShortenUrl = asyncHandler(async (req, res) => {
     })
     if (updatedurl != null) {
       res.status(202)
-      res.render('index', {
+      res.json({
         message: "URL's Updated Successfully!!",
         urls: updatedurl
       })
@@ -118,7 +119,7 @@ const updateShortenUrl = asyncHandler(async (req, res) => {
     }
   }
   res.status(202)
-  res.render('index', { message: 'URL Not Found!!' })
+  res.json({ message: 'URL Not Found!!' })
 })
 const getAllUrl = asyncHandler(async (req, res) => {
   if (req.user === undefined) {
@@ -127,8 +128,9 @@ const getAllUrl = asyncHandler(async (req, res) => {
     return
   }
   const urls = await Url.find({ user_id: req.user.id })
+  console.log(urls);
   res.status(200)
-  res.render('index', { message: "URL's Fetched Successfully!!", urls: urls })
+  res.json({ message: "URL's Fetched Successfully!!", urls: urls })
   return
 })
 module.exports = {

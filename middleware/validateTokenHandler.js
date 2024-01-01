@@ -4,6 +4,7 @@ require("dotenv").config();
 const validateToken=asyncHandler(async (req,res,next)=>{
     let token;
     let authstatus=req.cookies.token?true:false;
+    console.log(req.cookies.token);
     if(authstatus){
         console.log("Access Token Being Verified...");
         token=req.cookies.token;

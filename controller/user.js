@@ -3,8 +3,9 @@ const User = require('../model/user.model')
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const getProfile = asyncHandler(async (req, res) => {
+  const user=await User.findById(req.user.id);
   res.status(200)
-  res.json({ message: 'Fetched User Profile' })
+  res.json({ message: 'Fetched User Profile',profile:{username:user.username,fullname:user.fullname,email:user.email}})
 })
 const registerUser = asyncHandler(async (req, res) => {
   const { username, fullname, email, password } = req.body
