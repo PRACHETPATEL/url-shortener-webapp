@@ -3,6 +3,12 @@ const User = require('../model/user.model')
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const getProfile = asyncHandler(async (req, res) => {
+  if(req.user===undefined){
+    res.status(401);
+    res.json({ message: 'Not Authorized!!'});
+    res.end();
+    return;
+  }
   const user=await User.findById(req.user.id);
   res.status(200)
   res.json({ message: 'Fetched User Profile',profile:{username:user.username,fullname:user.fullname,email:user.email}})
@@ -10,17 +16,17 @@ const getProfile = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { username, fullname, email, password } = req.body
   if (!username || !fullname || !email || !password) {
-    res.render('register', { message: 'all fields are compulsory' })
+    res.json({ message: 'all fields are compulsory' })
     return;
   }
   const userEmailAvailable = await User.findOne({ email })
   const userUsernameAvailable = await User.findOne({ username })
   if (userUsernameAvailable) {
-    res.render('register', { message: 'Username ALready Exists' })
+    res.json({ message: 'Username ALready Exists' })
     return
   }
   if (userEmailAvailable) {
-    res.render('register', { message: 'Email ALready Exists' })
+    res.json({ message: 'Email ALready Exists' })
     return
   }
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -32,7 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
   })
   console.log(user);
   res.status(200)
-  res.render('register', { message: 'Registered Successfully!!' })
+  res.json({ message: 'Registered Successfully!!' })
 })
 const loginUser = asyncHandler(async (req, res) => {
   const { usernameoremail, password } = req.body

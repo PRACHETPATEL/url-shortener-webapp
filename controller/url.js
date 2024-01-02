@@ -5,8 +5,11 @@ const nextCombination = require('../utilities/nextString')
 
 const addUrl = asyncHandler(async (req, res) => {
   const { url } = req.body
+  if (!url) {
+    res.json({ status: 400, message: 'URL Required!!' })
+    return
+  }
   let urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/
-  const urls = await Url.find()
   let shortenedurl = `${req.protocol}://${req.get('host')}/`
   let urlobj = new Object()
   const check = await Url.findOne({ shortened_url: url })
@@ -16,11 +19,11 @@ const addUrl = asyncHandler(async (req, res) => {
     return
   }
   try {
+    const urls = await Url.find()
     if (urls.length >= 1 && urlRegex.test(url)) {
       const lasturl = urls[urls.length - 1]
       const code = lasturl.shortened_code_string
-      const shortenedcodestring = nextCombination(code);
-      console.log(req.user);
+      const shortenedcodestring = nextCombination(code)
       if (req.user === undefined) {
         urlobj = await Url.create({
           user_id: new mongoose.Types.ObjectId('5f6a6b7c8d9e1f2a3b4c5d6e'),
@@ -90,36 +93,48 @@ const deleteShortenUrl = asyncHandler(async (req, res) => {
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
     const urls = await Url.findByIdAndDelete(req.params.id)
     if (urls != null) {
-        res.status(202)
-        res.json({ message: "URL's Deleted Successfully!!", urls: urls })
-        return
+      res.status(202)
+      res.json({ message: "URL's Deleted Successfully!!", urls: urls })
+      return
     }
   }
   res.status(202)
   res.json({ message: 'URL Not Found!!' })
- 
 })
 const updateShortenUrl = asyncHandler(async (req, res) => {
-  if(req.user===undefined){
-      res.status(401);
-      res.json({message:"Unauthorized"})
-      return;
+  if (req.user === undefined) {
+    res.status(401)
+    res.json({ message: 'Unauthorized' })
+    return
   }
-  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-    const updatedurl = await Url.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
-    })
+  const { url } = req.body
+  let urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/
+  let shortenedurl = `${req.protocol}://${req.get('host')}/`
+  const check = await Url.findOne({ shortened_url: url })
+  if (check || url.includes(`${req.protocol}://${req.get('host')}/`)) {
+    console.log(check)
+    res.json({ status: 400, message: 'Url Already Shortened' })
+    return
+  }
+  if (mongoose.Types.ObjectId.isValid(req.params.id) && urlRegex.test(url)) {
+    const updatedurl = await Url.findByIdAndUpdate(
+      req.params.id,
+      { url: url },
+      {
+        new: true
+      }
+    )
     if (updatedurl != null) {
       res.status(202)
       res.json({
         message: "URL's Updated Successfully!!",
         urls: updatedurl
       })
-      return;
+      return
     }
   }
-  res.status(202)
-  res.json({ message: 'URL Not Found!!' })
+  res.status(400)
+  res.json({ message: 'URL Not Updated!!' })
 })
 const getAllUrl = asyncHandler(async (req, res) => {
   if (req.user === undefined) {
@@ -128,7 +143,7 @@ const getAllUrl = asyncHandler(async (req, res) => {
     return
   }
   const urls = await Url.find({ user_id: req.user.id })
-  console.log(urls);
+  console.log(urls)
   res.status(200)
   res.json({ message: "URL's Fetched Successfully!!", urls: urls })
   return

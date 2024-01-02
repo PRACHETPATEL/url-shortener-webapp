@@ -4,7 +4,7 @@ require("dotenv").config();
 const validateToken=asyncHandler(async (req,res,next)=>{
     let token;
     let authstatus=req.cookies.token?true:false;
-    console.log(req.cookies.token);
+    // console.log(req.cookies.token);
     if(authstatus){
         console.log("Access Token Being Verified...");
         token=req.cookies.token;
@@ -22,7 +22,7 @@ const validateToken=asyncHandler(async (req,res,next)=>{
             throw new Error("User is not authorized or token is missing in request");
         }
     }else{
-        res.json({status:"401",message:"Not Authorized!!"});
+        next();
     }
 });
 module.exports=validateToken;

@@ -7,20 +7,18 @@ require("dotenv").config()
 const logger=require("morgan");
 const errorHandler = require("./middleware/errorHandler");
 const connectDB = require("./db/connectDb");
-const redirectRouter = require("./routes/redirectRouter");
 const cookieParser = require('cookie-parser');
+
+const redirectRouter=require("./routes/redirectRouter")
 connectDB();
 app.set("view engine","ejs");
 app.use(express.json());
 app.use(cookieParser())
-app.use(logger("combined"));
+app.use(logger("tiny"));
 app.use(express.static(path.join(__dirname,"./public")));
 
 app.use("/api/url",urlRouter);
 app.use("/api/user",userRouter);
-app.get("/home",(req,res)=>{
-    res.render("index",{age:20,name:"Prachet"});
-})
 app.use("/",redirectRouter);
 
 app.use((req, res, next) => {
