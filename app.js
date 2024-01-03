@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 const redirectRouter=require("./routes/redirectRouter")
 connectDB();
 app.set("view engine","ejs");
+app.set('trust proxy', true);
 app.use(express.json());
 app.use(cookieParser())
 app.use(logger("tiny"));
