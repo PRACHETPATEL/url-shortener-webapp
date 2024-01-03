@@ -9,6 +9,7 @@ const addUrl = asyncHandler(async (req, res) => {
     res.json({ status: 400, message: 'URL Required!!' })
     return
   }
+  console.log(url);
   let urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/
   let shortenedurl = `${req.protocol}://${req.get('host')}/`
   let urlobj = new Object()
