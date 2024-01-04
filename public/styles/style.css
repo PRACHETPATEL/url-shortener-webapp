@@ -2324,7 +2324,46 @@ textarea.form-control-lg {
 .input-group > .form-floating:not(:focus-within):invalid,
 .input-group > .form-floating:not(:focus-within).is-invalid {
   z-index: 4; }
+  #snackbar {
+    visibility: hidden;
+    min-width: 200px;
+    margin-left: -100px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;  
+    top: 30px;
+    font-size: 17px;
+}
+#snackbar.show {
+visibility: visible;
+-webkit-animation: fadein 1s, fadeout 1s 4s;
+animation: fadein 1s, fadeout 1s 4s;
+}
 
+@-webkit-keyframes fadein {
+from {top: 0; opacity: 0;} 
+to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+from {top: 0; opacity: 0;}
+to {top: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+from {top: 30px; opacity: 1;} 
+to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+from {top: 30px; opacity: 1;}
+to {top: 0; opacity: 0;}
+}
 .btn {
   --bs-btn-padding-x: 0.75rem;
   --bs-btn-padding-y: 0.375rem;

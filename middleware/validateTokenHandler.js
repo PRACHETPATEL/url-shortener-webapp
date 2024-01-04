@@ -8,19 +8,18 @@ const validateToken=asyncHandler(async (req,res,next)=>{
     if(authstatus){
         console.log("Access Token Being Verified...");
         token=req.cookies.token;
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECERT ,(err,decoded)=>{
-            if(err){
-                res.status(401);
-                throw new Error("User is not authorized")
-            }
+        if(token!==""){
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECERT ,(err,decoded)=>{
+                if(err){
+                    res.status(401);
+                    throw new Error("User is not authorized")
+                }
             req.user=decoded.user;
             console.log(req.user.id);
             next();
-        });
-        if(!token){
-            res.status(401);
-            throw new Error("User is not authorized or token is missing in request");
+            });
         }
+        next();
     }else{
         next();
     }

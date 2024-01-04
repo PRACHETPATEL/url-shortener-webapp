@@ -5,18 +5,18 @@ const nextCombination = require('../utilities/nextString')
 
 const addUrl = asyncHandler(async (req, res) => {
   const { url } = req.body
+  console.log(url);
   if (!url) {
     res.json({ status: 400, message: 'URL Required!!' })
     return
   }
-  console.log(url);
   let urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/
   let shortenedurl = `${req.protocol}://${req.get('host')}/`
   let urlobj = new Object()
   const check = await Url.findOne({ shortened_url: url })
   if (check || url.includes(`${req.protocol}://${req.get('host')}/`)) {
-    console.log(check)
-    res.json({ status: 400, message: 'Url Already Shortened' })
+    res.status(400)
+    res.json({ status: 400, message: 'Url Cannot Be Shortened' })
     return
   }
   try {
@@ -25,7 +25,13 @@ const addUrl = asyncHandler(async (req, res) => {
       const lasturl = urls[urls.length - 1]
       const code = lasturl.shortened_code_string
       const shortenedcodestring = nextCombination(code)
+      let urlcookie=req.cookies.urls;
       if (req.user === undefined) {
+        if(urlcookie && urlcookie.length>=3){
+          res.status(400);
+          res.json({status:400,message:"Please Login To Shorten More URLS"});
+          return;
+        }
         urlobj = await Url.create({
           user_id: new mongoose.Types.ObjectId('5f6a6b7c8d9e1f2a3b4c5d6e'),
           url: url,
@@ -33,6 +39,13 @@ const addUrl = asyncHandler(async (req, res) => {
           shortened_url: shortenedurl + shortenedcodestring,
           visits: 0
         })
+        console.log(req.cookies.url);
+        if(req.cookies.urls===undefined){
+          res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
+        }else{
+          urlcookie[urlcookie.length]={url:urlobj};
+          res.cookie('urls',urlcookie,{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
+        }
       } else {
         urlobj = await Url.create({
           user_id: req.user.id,
@@ -43,7 +56,7 @@ const addUrl = asyncHandler(async (req, res) => {
         })
       }
       res.status(201)
-      res.json({ message: 'URL Shortned', url: urlobj })
+      res.json({ message: 'URL Shortened', url: urlcookie })
       return
     } else if (urls.length == 0 && urlRegex.test(url)) {
       if (req.user === undefined) {
@@ -54,6 +67,9 @@ const addUrl = asyncHandler(async (req, res) => {
           shortened_url: shortenedurl + 'aaaaa',
           visits: 0
         })
+        if(req.cookies.urls===undefined){
+          res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
+        }
       } else {
         urlobj = await Url.create({
           user_id: req.user.id,
@@ -65,11 +81,11 @@ const addUrl = asyncHandler(async (req, res) => {
         })
       }
       res.status(201)
-      res.json({ message: 'URL Shortned', url: urlobj })
+      res.json({ message: 'URL Shortened', urls: urlobj });
       return
     } else {
-      res.status(200)
-      res.json({ message: 'URL Format Not valid' })
+      res.status(400)
+      res.json({status:400, message: 'URL Format Not valid' })
       return
     }
   } catch (err) {
@@ -138,16 +154,18 @@ const updateShortenUrl = asyncHandler(async (req, res) => {
   res.json({ message: 'URL Not Updated!!' })
 })
 const getAllUrl = asyncHandler(async (req, res) => {
-  if (req.user === undefined) {
-    res.status(401)
-    res.json({ message: 'Unauthorized' })
-    return
+  if (req.user !== undefined) {
+    const urls = await Url.find({ user_id: req.user.id })
+    console.log(urls)
+    res.status(200)
+    res.json({ message: "URL's Fetched Successfully!!", urls: urls })
+    return;
+  }else if(req.cookies.urls){
+    res.json({ message: "URL's Fetched Successfully!!", urls: req.cookies.urls })
+    return;
   }
-  const urls = await Url.find({ user_id: req.user.id })
-  console.log(urls)
-  res.status(200)
-  res.json({ message: "URL's Fetched Successfully!!", urls: urls })
-  return
+  res.json({status:404, message: "No URL's Found!!"})
+    return;
 })
 module.exports = {
   addUrl,

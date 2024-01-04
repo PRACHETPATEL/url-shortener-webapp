@@ -68,7 +68,7 @@ const loginUser = asyncHandler(async (req, res) => {
           },
         },process.env.ACCESS_TOKEN_SECERT,{expiresIn:"1440m"});
         console.log(accessToken);
-        res.cookie('token',accessToken,{ maxAge: 1440000, httpOnly: true, secure: true, sameSite: 'none'  });  
+        res.cookie('token',accessToken,{ maxAge: 1440000, httpOnly: true, secure: false, sameSite: 'none'  });  
         res.json({status:200,message:"success!!"});
         return;
       }else{
