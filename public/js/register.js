@@ -38,12 +38,12 @@ window.addEventListener('load',async ()=>{
     form.addEventListener('submit',async (e)=>{
         e.preventDefault();
         let response=await axios.post(api+"/api/user/register",{username:username.value,fullname:fullname.value,email:email.value,password:password.value});
-        username.value="";
-        fullname.value="";
-        email.value="";
-        password.value="";
-        repassword.value="";
         if(response.data.status===200){
+            username.value="";
+            fullname.value="";
+            email.value="";
+            password.value="";
+            repassword.value="";
             await delay(3000,"alert-success",`<i class="fa-solid fa-check-double "></i> ${response.data.message}`,"#198754a4");
         }else{
             showSnackBar("alert-danger",`<i class="fa-solid fa-bomb "></i> ${response.data.message}`,"#dc354696");

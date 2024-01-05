@@ -23,6 +23,8 @@ window.addEventListener('load',async ()=>{
         const response=await axios.post(api+"/api/user/login",{usernameoremail:usernameoremail,password:password});
         console.log(response.data);
         if(response.data.status===200){
+            document.getElementById('password').value="";
+            document.getElementById('usernameoremail').value="";
             showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> ${response.data.message}`,true,"#198754a4",1000);
         }else{
             showSnackBar("alert-danger",`<i class="fa-solid fa-bomb "></i> ${response.data.message}`,false,"#dc354696",4000);
