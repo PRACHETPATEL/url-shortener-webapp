@@ -39,7 +39,7 @@ const addUrl = asyncHandler(async (req, res) => {
           shortened_url: shortenedurl + shortenedcodestring,
           visits: 0
         })
-        console.log(req.cookies.url);
+        // console.log(req.cookies.url);
         if(req.cookies.urls===undefined){
           res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
         }else{

@@ -4,8 +4,8 @@ const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const getProfile = asyncHandler(async (req, res) => {
   if(req.user===undefined){
-    res.status(401);
-    res.json({ message: 'Not Authorized!!'});
+    // res.status(401);
+    res.json({status:401, message: 'Not Authorized!!'});
     res.end();
     return;
   }

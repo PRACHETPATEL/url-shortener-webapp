@@ -18,17 +18,17 @@ window.addEventListener('load',async ()=>{
             url_item.classList.add("gap-3");
             url_item.innerHTML=` <div class="col-lg-11 col-sm-12 col-12 bg-white  d-flex flex-lg-row flex-column gap-lg-4  gap-3 p-1  align-items   -center" style="min-height: 8vh;border-radius: 0.375rem;">
             <div class="col-lg-8 col-12  d-flex flex-lg-row  gap-2 justify-content-between align-items-center">
-                <div class="col-lg-6 " style="white-space:nowrap;overflow: hidden;font-size: 1.2rem;width:50%;text-overflow: ellipsis;">${element.url.url}</div>
+                <div class="col-lg-6 " style="white-space:nowrap;overflow: hidden;font-size: 1.2rem;width:50%;text-overflow: ellipsis;" title="${element.url.url}">${element.url.url}</div>
                 <a class="col-lg-6 " href="${element.url.shortened_url}" id="url-${count}" target="_blank" style="text-overflow: ellipsis;width:50%;white-space:nowrap;overflow: hidden;font-size: 1.2rem;">${element.url.shortened_url}</a>
             </div>
             <div class="col-lg-3 col-12 d-flex flex-lg-row  gap-4 justify-content-center align-items-center">
-                <i class="fa-solid fa-qrcode" style="font-size: 1.5rem;"></i>
-                <i class="fa-solid fa-chart-line" style="font-size: 1.5rem;"></i>
-                <i class="fa-solid fa-copy" onclick=copyUrl(${count}) style="font-size: 1.5rem;"></i>
-                <i class=" d-lg-none d-flex fa-solid fa-xmark" onclick=deleteUrl(${count}) style="font-size: 1.5rem;"></i>
+                <i class="fa-solid fa-qrcode" title="generate QRcode" onclick=generateQR(${count},"${element.url.shortened_url}")  style="font-size: 1.5rem;"></i>
+                <i class="fa-solid fa-chart-line" onclick=viewStats(${count},"${element.url._id}") title="View Stats" style="font-size: 1.5rem;"></i>
+                <i class="fa-solid fa-copy" title="Copy Short URL" onclick=copyUrl(${count},"${element.url.shortened_url}") style="font-size: 1.5rem;"></i>
+                <i class=" d-lg-none d-flex fa-solid fa-xmark" title="Hide" onclick=deleteUrl(${count}) style="font-size: 1.5rem;"></i>
             </div>
         </div>
-        <i class="nav-item col-lg-1 d-lg-flex d-sm-none d-none fa-solid fa-xmark"  onclick=deleteUrl(${count}) style="font-size: 2rem;"></i>`;
+        <i class="nav-item col-lg-1 d-lg-flex d-sm-none d-none fa-solid fa-xmark" title="Hide"  onclick=deleteUrl(${count}) style="font-size: 2rem;"></i>`;
         count++;
         url_list.appendChild(url_item);
         });
@@ -55,6 +55,47 @@ window.addEventListener('load',async ()=>{
                 showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i>  Something went wrong...","#dc354696");
             }
         })
+    }
+    window.generateQR=(id,url)=>{
+        console.log(id,url);
+        const myModal = new bootstrap.Modal(document.getElementById('qrModal'), focus);
+        myModal.show();
+        document.getElementById('loader').style.display = 'flex ';
+        document.getElementById('displayqr').style.display = 'none';
+        let qr=window.qr = new QRious({
+            element: document.getElementById('qrcode'),
+            value: url,
+            size: 150,
+        });
+        qr.foreground="white"
+        
+        qr.background="black"
+        let dataURL=qr.toDataURL('image/png');
+        let a = document.getElementById('downloadLink');
+        a.href = dataURL;
+        a.download = id + '.png';
+        setTimeout(()=>{
+            document.getElementById('loader').style.display = 'none';   
+            downloadLink.style.display = 'block'; 
+            document.getElementById('displayqr').style.display = 'flex';
+        },500);
+    }
+    window.copyUrl=(id,url)=>{
+      let tempInput = document.createElement('input');
+      tempInput.value = url;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      tempInput.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      showSnackBar("alert-success",`<i class="fa-solid fa-check "></i> Url Copied`,"#198754a4");
+    }
+    window.viewStats=async (id,objid)=>{
+        let profile=await axios.get(api+"/api/user/profile");
+        // console.log(profile);
+        if(profile.data.status===401){
+            showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i> Please Login To View Stats","#dc354696");
+        }
     }
     form.addEventListener('submit',async(e)=>{
         e.preventDefault();
