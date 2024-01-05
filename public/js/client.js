@@ -24,23 +24,37 @@ window.addEventListener('load',async ()=>{
             <div class="col-lg-3 col-12 d-flex flex-lg-row  gap-4 justify-content-center align-items-center">
                 <i class="fa-solid fa-qrcode" style="font-size: 1.5rem;"></i>
                 <i class="fa-solid fa-chart-line" style="font-size: 1.5rem;"></i>
-                <i class="fa-solid fa-copy" style="font-size: 1.5rem;"></i>
-                <i class=" d-lg-none d-flex fa-solid fa-xmark"  onclick="copyUrl(${count})" style="font-size: 1.5rem;"></i>
+                <i class="fa-solid fa-copy" onclick=copyUrl(${count}) style="font-size: 1.5rem;"></i>
+                <i class=" d-lg-none d-flex fa-solid fa-xmark" onclick=deleteUrl(${count}) style="font-size: 1.5rem;"></i>
             </div>
         </div>
-        <i class="nav-item col-lg-1 d-lg-flex d-sm-none d-none fa-solid fa-xmark"  onclick="deleteUrl(${count})" style="font-size: 2rem;"></i>`;
+        <i class="nav-item col-lg-1 d-lg-flex d-sm-none d-none fa-solid fa-xmark"  onclick=deleteUrl(${count}) style="font-size: 2rem;"></i>`;
         count++;
         url_list.appendChild(url_item);
         });
     }
     }
     displayUrlList();
+    
     let showSnackBar=(alert,message,backgroundColor)=>{
         let x = document.getElementById("snackbar");
         x.className="show "+alert;
         x.style.backgroundColor=backgroundColor;
         x.innerHTML=message;
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+    window.deleteUrl=(id)=>{
+            axios.delete(api+"/api/url/guest/"+id).then((response)=>{
+            console.log(response.data);
+            if(response.data.status===201){
+                showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> ${response.data.message}`,"#198754a4");
+                displayUrlList();
+            }else if(response.data.status===400){
+                showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i> "+response.data.message,"#dc354696");
+            }else{
+                showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i>  Something went wrong...","#dc354696");
+            }
+        })
     }
     form.addEventListener('submit',async(e)=>{
         e.preventDefault();

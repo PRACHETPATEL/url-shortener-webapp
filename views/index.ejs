@@ -55,7 +55,7 @@
                         <button class="btn bg-secondary col-lg-4" type="submit" style="height: 7vh;">Shorten URL</button>
                     </div>
                 </form>
-                <div id="urls" class="w-100 d-flex flex-column gap-3 p-lg-5 p-sm-3 p-2" style="color:#2F2F33 ;">
+                <div id="urls"  class="w-100 d-flex flex-column gap-3 p-lg-5 p-sm-3 p-2" style="color:#2F2F33 ;">
                    
                 </div>
             </div>
@@ -63,6 +63,20 @@
         
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.3/axios.min.js" integrity="sha512-JWQFV6OCC2o2x8x46YrEeFEQtzoNV++r9im8O8stv91YwHNykzIS2TbvAlFdeH0GVlpnyd79W0ZGmffcRi++Bw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="../js/homepage.js"></script>
+    <script src="../js/client.js"></script>
+    <!-- <script>
+        document.addEventListener('load',()=>{
+            let deleteUrl=(id)=>{
+            axios.delete(api+"/api/url/guest/"+id).then((response)=>{
+            console.log(response.data);
+            if(response.data.status===201){
+                showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> ${response.data.message}`,"#198754a4");
+            }else{
+                showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i>  Something went wrong...","#dc354696");
+            }
+        })
+        }
+        })
+    </script> -->
 </body>
 </html>

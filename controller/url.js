@@ -166,11 +166,26 @@ const getAllUrl = asyncHandler(async (req, res) => {
   }
   res.json({status:404, message: "No URL's Found!!"})
     return;
-})
+});
+const deleteGuestCookie=(req,res)=>{
+  if(req.cookies.urls!==undefined){
+    let urls=req.cookies.urls;
+    // console.log(urls,req.params.id,urls.length);
+    if(req.params.id<urls.length){
+      urls.splice(req.params.id,1)
+      // console.log(urls);
+      res.cookie("urls",urls,{maxAge:864000000, httpOnly: true, secure: true, sameSite: 'none' });  
+      res.json({status:201,message:"shortened url hidden!!"})
+      return;
+    }
+  };
+  res.json({status:400,message:"no url was found!!"})
+}
 module.exports = {
   addUrl,
   getUnshortenUrl,
   deleteShortenUrl,
   updateShortenUrl,
-  getAllUrl
+  getAllUrl,
+  deleteGuestCookie
 }

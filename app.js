@@ -21,13 +21,11 @@ app.use(express.static(path.join(__dirname,"./public")));
 app.use("/api/url",urlRouter);
 app.use("/api/user",userRouter);
 app.use("/",redirectRouter);
-
-app.use((req, res, next) => {
-    res.status(404);
-    throw new Error("URL NOT FOUND");
-});
 app.use(errorHandler);
-
+app.get("*",(req, res) => {
+    res.status(404);
+    res.render("error",{title:"Not Found",message:"Url Not Found!!",d1:4,d2:0,d3:4});
+});
 app.listen(process.env.PORT,()=>{
     console.log(`URL shortner app started on port ${process.env.PORT}`);
 })
