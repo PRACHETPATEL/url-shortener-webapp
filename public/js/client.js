@@ -108,10 +108,10 @@ window.addEventListener('load',async ()=>{
       showSnackBar("alert-success",`<i class="fa-solid fa-check "></i> Url Copied`,"#198754a4");
     }
     window.viewStats=async (id,objid)=>{
-        let profile=await axios.get(api+"/api/user/profile");
+        let status=await axios.get(api+"/api/user/getloginstatus");
         // console.log(profile);
-        if(profile.data.status===401){
-            showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i> Please Login To View Stats","#dc354696");
+        if(status.data.status!==200){
+            showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i> Please Login<br> To View Stats","#dc354696");
         }
     }
     form.addEventListener('submit',async(e)=>{

@@ -41,10 +41,10 @@ const addUrl = asyncHandler(async (req, res) => {
         })
         // console.log(req.cookies.url);
         if(req.cookies.urls===undefined){
-          res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
+          res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000});
         }else{
           urlcookie[urlcookie.length]={url:urlobj};
-          res.cookie('urls',urlcookie,{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
+          res.cookie('urls',urlcookie,{ maxAge: 864000000});
         }
       } else {
         urlobj = await Url.create({
@@ -68,7 +68,7 @@ const addUrl = asyncHandler(async (req, res) => {
           visits: 0
         })
         if(req.cookies.urls===undefined){
-          res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
+          res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000});
         }
       } else {
         urlobj = await Url.create({
@@ -176,7 +176,7 @@ const deleteGuestCookie=async (req,res)=>{
       await Url.findByIdAndDelete(urls[req.params.id].url._id);
       urls.splice(req.params.id,1)
       // console.log(urls);
-      res.cookie("urls",urls,{maxAge:864000000, httpOnly: true, secure: true, sameSite: 'none' });  
+      res.cookie("urls",urls,{maxAge:864000000});  
       res.json({status:201,message:"shortened url deleted!!"})
       return;
     }

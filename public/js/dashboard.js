@@ -8,7 +8,6 @@ let checkloginstatus=async()=>{
 window.addEventListener('load',async ()=>{
     checkloginstatus();
     const sidebar=document.getElementById("sidebar");
-    console.log(api);
     let showSnackBar=(alert,message,backgroundColor)=>{
         let x = document.getElementById("snackbar");
         x.className="show "+alert;

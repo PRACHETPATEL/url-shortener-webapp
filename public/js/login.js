@@ -21,7 +21,6 @@ window.addEventListener('load',async ()=>{
         let usernameoremail=document.getElementById('usernameoremail').value;
         let password=document.getElementById('password').value;
         const response=await axios.post(api+"/api/user/login",{usernameoremail:usernameoremail,password:password});
-        console.log(response.data);
         if(response.data.status===200){
             document.getElementById('password').value="";
             document.getElementById('usernameoremail').value="";
