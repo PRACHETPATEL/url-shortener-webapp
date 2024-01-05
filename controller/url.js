@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler')
 const Url = require('../model/url.model')
 const { default: mongoose } = require('mongoose')
 const nextCombination = require('../utilities/nextString')
+const UrlMetadata = require('../model/urlmetadata.model')
 
 const addUrl = asyncHandler(async (req, res) => {
   const { url } = req.body
@@ -29,7 +30,7 @@ const addUrl = asyncHandler(async (req, res) => {
       if (req.user === undefined) {
         if(urlcookie && urlcookie.length>=3){
           res.status(400);
-          res.json({status:400,message:"Please Login To Shorten More URLS"});
+          res.json({status:400,message:" Please Login <br> To shorten and <br> manage more urls"});
           return;
         }
         urlobj = await Url.create({
@@ -174,6 +175,7 @@ const deleteGuestCookie=async (req,res)=>{
     if(req.params.id<urls.length){
       // console.log(urls[req.params.id].url._id);
       await Url.findByIdAndDelete(urls[req.params.id].url._id);
+      await UrlMetadata.deleteMany({url_id:urls[req.params.id].url._id});
       urls.splice(req.params.id,1)
       // console.log(urls);
       res.cookie("urls",urls,{maxAge:864000000});  
