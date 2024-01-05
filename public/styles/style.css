@@ -9390,3 +9390,38 @@ to {top: 0; opacity: 0;}
         transform: rotate(45deg) rotateX(-385deg) rotateY(385deg);
       }
     }
+    .nav-item{
+      text-decoration: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+  }
+  .sidebar-item{
+      width: 100%;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+  }
+  .sidebar-item:hover{
+      color: var(--bs-secondary);
+  }
+  .sidebar-item-active{
+      border-left:0.7rem solid var(--bs-secondary)
+  }
+  .nav-item:hover{
+      text-decoration: none;
+      color: var(--bs-secondary);
+      font-size: 1rem;
+      padding-bottom: 5px;
+  }
+  .box{
+      z-index: 1;
+  }
+  .active{
+      color: var(--bs-secondary) !important;
+  }
+  i:active{
+      color: var(--bs-secondary) !important;
+  }

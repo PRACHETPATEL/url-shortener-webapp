@@ -1,8 +1,16 @@
 window.addEventListener('load',async ()=>{
     const form=document.getElementById("urlform");
+    // console.log(form);
     const api=location.protocol+"//"+ location.hostname+":"+location.port;
-    let url_list=document.getElementById("urls")
+    let url_list=document.getElementById("urls");
     let apiurlshorten=api+"/api/url/shorten";
+    const sidebar=document.getElementById("sidebar");
+    window.hideSidebar=()=>{
+        sidebar.style.display="none";
+    }
+    window.showSidebar=()=>{
+        sidebar.style.display="flex";
+    }
     const displayUrlList=async ()=>{    
         url_list.innerHTML="";
         let responseurls=await axios.get(api+"/api/url",{ withCredentials:true });
@@ -45,7 +53,6 @@ window.addEventListener('load',async ()=>{
     }
     window.deleteUrl=(id)=>{
             axios.delete(api+"/api/url/guest/"+id).then((response)=>{
-            console.log(response.data);
             if(response.data.status===201){
                 showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> ${response.data.message}`,"#198754a4");
                 displayUrlList();
@@ -57,7 +64,6 @@ window.addEventListener('load',async ()=>{
         })
     }
     window.generateQR=(id,url)=>{
-        console.log(id,url);
         const myModal = new bootstrap.Modal(document.getElementById('qrModal'), focus);
         myModal.show();
         document.getElementById('loader').style.display = 'flex ';
@@ -67,9 +73,8 @@ window.addEventListener('load',async ()=>{
             value: url,
             size: 150,
         });
-        qr.foreground="white"
-        
-        qr.background="black"
+        qr.foreground="white";
+        qr.background="black";
         let dataURL=qr.toDataURL('image/png');
         let a = document.getElementById('downloadLink');
         a.href = dataURL;
@@ -100,6 +105,7 @@ window.addEventListener('load',async ()=>{
     form.addEventListener('submit',async(e)=>{
         e.preventDefault();
         const url=document.getElementById("url").value;
+        document.getElementById("url").value="";
         await axios.post(apiurlshorten,{url:url},{ withCredentials: true }).then((response)=>{
             showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> ${response.data.message}`,"#198754a4");
         }).catch((err)=>{
