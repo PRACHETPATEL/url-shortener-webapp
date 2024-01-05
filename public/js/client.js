@@ -1,7 +1,19 @@
+const api=location.protocol+"//"+ location.hostname+":"+location.port;
+let checkloginstatus=async()=>{
+    const check=await axios.get(api+"/api/user/getloginstatus");
+    if(check.data.status==200){
+        window.location.href=api+"/client/dashboard";
+    }
+}
 window.addEventListener('load',async ()=>{
+    checkloginstatus();
     const form=document.getElementById("urlform");
     // console.log(form);
     const api=location.protocol+"//"+ location.hostname+":"+location.port;
+    // const check=await axios.get(api+"/api/user/getloginstatus");
+    // if(check.data.status==200){
+        // window.location.href=api+"/client/dashboard";
+    // }
     let url_list=document.getElementById("urls");
     let apiurlshorten=api+"/api/url/shorten";
     const sidebar=document.getElementById("sidebar");

@@ -1,6 +1,13 @@
+const api=location.protocol+"//"+ location.hostname+":"+location.port;
+let checkloginstatus=async()=>{
+    const check=await axios.get(api+"/api/user/getloginstatus");
+    if(check.data.status==200){
+        window.location.href=api+"/client/dashboard";
+    }
+}
 window.addEventListener('load',async ()=>{
+    checkloginstatus();
     const form=document.getElementById("urlform");
-    const api=location.protocol+"//"+ location.hostname+":"+location.port;
     let url_list=document.getElementById("urls");
     const sidebar=document.getElementById("sidebar");
     let showSnackBar=(alert,message,backgroundColor)=>{

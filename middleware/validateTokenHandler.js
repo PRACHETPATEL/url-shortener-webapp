@@ -14,14 +14,15 @@ const validateToken=asyncHandler(async (req,res,next)=>{
                     res.status(401);
                     throw new Error("User is not authorized")
                 }
-            req.user=decoded.user;
-            console.log(req.user.id);
-            next();
+                req.user=decoded.user;
+                next();
+                return;
             });
         }
-        next();
+        return;
     }else{
         next();
+        return;
     }
 });
 module.exports=validateToken;

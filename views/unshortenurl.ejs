@@ -22,8 +22,8 @@
             </div>
             <a  href="/client/home" class="sidebar-item " >HOME</a>
             <a href="/client/unshorten" class="sidebar-item sidebar-item-active" >UNSHORTEN URL</a>
-            <a href="#" class="sidebar-item" >LOGIN</a>
-            <a href="#" class="sidebar-item" >REGISTER</a>
+            <a href="/client/login" class="sidebar-item" >LOGIN</a>
+            <a href="/client/register" class="sidebar-item" >REGISTER</a>
         </div>
     </div>
     <div class="container">
@@ -36,8 +36,8 @@
             <div class="d-none d-md-flex justify-content-end align-items-center w-75 h-100 gap-5">
                 <a href="/client/home" class="nav-item" >HOME</a>
                 <a href="/client/unshorten" class="nav-item active" >UNSHORTEN URL</a>
-                <a href="#" class="nav-item" >LOGIN</a>
-                <a href="#" class="nav-item" >REGISTER</a>
+                <a href="/client/login" class="nav-item" >LOG IN</a>
+                <a href="/client/register" class="nav-item" >REGISTER</a>
             </div>
             <div class=" py-2 d-flex d-md-none" style="height: 8vh;">
                 <button type="button" onclick="showSidebar()" class="btn h-100 p-0"><i class="fa-solid fa-bars-staggered text-secondary" style="font-size: 2rem;width: 50px;font-family: Font Awesome 6 Free;"></i></button>
@@ -48,8 +48,8 @@
                 <form id="urlform" class="w-100" method="post">
                     <h2 class="text-center mt-5">UNSHORT URL</h2>
                     <div class="w-100 px-lg-5 pt-lg-5 px-sm-3 pt-sm-3 pt-2 px-2 d-flex flex-lg-row flex-sm-column flex-column gap-2">
-                        <input class="px-2 col-lg-8" id="url" placeholder="Enter Short URL Here" style="height: 7vh;border-radius: 0.375rem;border: none;line-height: 100%;" name="url" type="url" required>
-                        <button class="btn bg-secondary col-lg-4" type="submit" style="height: 7vh;">UNSHORT URL</button>
+                        <input class="px-2 col-lg-8 my-3" id="url" placeholder="Enter Short URL Here" style="height: 7vh;border-radius: 0.375rem;border: none;line-height: 100%;" name="url" type="url" required>
+                        <button class="btn bg-secondary my-3 col-lg-4" type="submit" style="height: 7vh;">UNSHORT URL</button>
                     </div>
                 </form>
                 <div id="urls"  class="w-100 d-flex flex-column gap-3 px-lg-5 py-lg-5 px-sm-3 py-sm-3 py-2 px-2" style="color:#2F2F33 ;">

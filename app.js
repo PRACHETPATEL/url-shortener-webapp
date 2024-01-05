@@ -17,10 +17,17 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(logger("tiny"));
 app.use(express.static(path.join(__dirname,"./public")));
-
+app.use((req, res, next) => {
+    if (req.path.endsWith('/') && req.path.length > 1) {
+        const newPath = req.path.slice(0, -1);
+        return res.redirect(301, newPath + req.url.slice(req.path.length));
+    }
+    next();
+});
 app.use("/api/url",urlRouter);
 app.use("/api/user",userRouter);
 app.use("/",redirectRouter);
+
 app.use(errorHandler);
 app.get("*",(req, res) => {
     res.status(404);
