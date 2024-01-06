@@ -52,8 +52,9 @@ const registerUser = asyncHandler(async (req, res) => {
     username: username,
     fullname: fullname,
     email: email,
-    password: hashedPassword
-  })
+    password: hashedPassword,
+    profile:"0.png"
+  });
   console.log(user);
   res.json({status:200, message: 'Registered Successfully!!' })
 })

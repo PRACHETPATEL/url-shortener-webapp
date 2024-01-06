@@ -41,19 +41,6 @@ window.addEventListener('load',async ()=>{
             url_item.classList.add("justify-content-between");
             url_item.classList.add("align-items-center");
             url_item.classList.add("gap-3");
-        //     url_item.innerHTML=` <div class="col-lg-11 col-sm-12 col-12 bg-white  d-flex flex-lg-row flex-column gap-lg-4  gap-3 p-1  align-items   -center" style="min-height: 8vh;border-radius: 0.375rem;">
-        //     <div class="col-lg-8 col-12  d-flex flex-lg-row  gap-2 justify-content-between align-items-center">
-        //         <div class="col-lg-6 " style="white-space:nowrap;overflow: hidden;font-size: 1.2rem;width:50%;text-overflow: ellipsis;" title="${element.url}">${element.url}</div>
-        //         <a class="col-lg-6 " href="${element.shortened_url}" id="url-${count}" target="_blank" style="text-overflow: ellipsis;width:50%;white-space:nowrap;overflow: hidden;font-size: 1.2rem;">${element.shortened_url}</a>
-        //     </div>
-        //     <div class="col-lg-3 col-12 d-flex flex-lg-row  gap-4 justify-content-center align-items-center">
-        //         <i class="fa-solid fa-qrcode" title="generate QRcode" onclick=generateQR(${count},"${element.shortened_url}")  style="font-size: 1.5rem;"></i>
-        //         <i class="fa-solid fa-chart-line" onclick=viewStats(${count},"${element._id}") title="View Stats" style="font-size: 1.5rem;"></i>
-        //         <i class="fa-solid fa-copy" title="Copy Short URL" onclick=copyUrl(${count},"${element.shortened_url}") style="font-size: 1.5rem;"></i>
-        //         <i class=" d-lg-none d-flex fa-solid fa-trash" title="Hide" onclick=deleteUrl("${element._id}") style="font-size: 1.5rem;"></i>
-        //     </div>
-        // </div>
-        // <i class="nav-item col-lg-1 d-lg-flex d-sm-none d-none fa-solid fa-trash" title="Hide"  onclick=deleteUrl("${element._id}") style="font-size: 2rem;"></i>`;
             url_item.innerHTML=` <div class="w-100  d-flex flex-lg-row flex-sm-column py-1 flex-column gap-2">
             <div class="col-lg-10 col-sm-12 col-12 bg-white  d-flex flex-lg-row flex-column p-1 gap-2 align-items-center" style="min-height: 8vh;border-radius: 0.375rem;">
                 <div class="col-lg-8 col-12  d-flex flex-lg-row  gap-2 justify-content-between align-items-center">

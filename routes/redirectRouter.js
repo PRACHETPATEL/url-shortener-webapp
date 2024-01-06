@@ -21,5 +21,9 @@ router.route("/client/register").get((req,res)=>{
     res.status(200);
     res.render("register");
 })
+router.route("/client/profile").get((req,res)=>{
+    res.status(200);
+    res.render("profile");
+})
 router.route("/:id").get(redirectURL);
 module.exports=router;
