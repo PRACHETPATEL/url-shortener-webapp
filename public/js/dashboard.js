@@ -6,8 +6,17 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
-    checkloginstatus();
+    await checkloginstatus();
     let urls;
+    const profile=document.getElementById('profile');
+    const profile3=document.getElementById('profile3');
+    const username=document.getElementById('username');
+    const email=document.getElementById('email');
+    let user=await axios.get(api+"/api/user/profile");
+    profile.src="../images/profiles/"+user.data.profile.profile;
+    profile3.src="../images/profiles/"+user.data.profile.profile;
+    username.innerText=user.data.profile.username;
+    email.innerText=user.data.profile.email;
     const sidebar=document.getElementById("sidebar");
     const form=document.getElementById("urlform");
     let url_list=document.getElementById("urls");

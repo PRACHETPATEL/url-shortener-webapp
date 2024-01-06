@@ -1,94 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="icon" href="../images/logox.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>
+        .avatar-list .item.active .profile-avatar, .avatar-list .item:hover .profile-avatar {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .avatar-list .item .profile-avatar {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            transform: scale(.85);
+             opacity: .3;
+        }
+        .avatar-list {
+            margin: 0 -10px;
+        }
+        .avatar-list .item .checked {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    background: #ffdd95;
+    color: #111;
+    z-index: 2;
+    box-shadow: 0 0 5px rgba(0,0,0,.4);
+    font-size: 14px;
+    display: none;
+}
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+.avatar-list .item .profile-avatar {
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    transform: scale(.85);
+    opacity: .3;
+}
+        .avatar-list .item {
+            float: left;
+            margin: 10px;
+            width: calc(25% - 20px);
+            position: relative;
+            cursor: pointer;
+        }
+    .avatar-list .item.active .checked {
+    display: inline-block;
+}
+.profile-avatar img {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+        </style>
     <title>Home</title>
 </head>
-    <body class="bg-primary text-white" style="font-family: nova flat;">
-        <div id="sidebar" class="justify-content-end" style="display: none; z-index: 999;height: 100vh;width: 100vw; position: fixed;top:0;left: 0;backdrop-filter: blur(5px);">
-            <div class="col-lg-8 col-md-6 col-sm-4 col-2 h-100" onclick="hideSidebar()"></div>
-            <div class="col-lg-4 col-md-6 col-sm-8 col-10 h-100 d-flex flex-column" style="background-color: #2F2F33;">
-                <div class="d-flex my-3 justify-content-between" style="padding: 1.5rem;">
-                    <a href="" onclick="location.reload()" class=" h-100 d-flex gap-2 align-content-stretch text-decoration-none text-white" >
-                        <div class="d-flex align-items-center"> <img class="logo " src="../images/logox.png" style="max-width: 30px;max-height: 30px;"></img></div>
-                       
-                        <div class="d-flex align-items-center h-100" ><div style="font-size: 1rem;line-height: 100%;">URLSHORTENER</div></div>
-                    </a>
-                    <button type="button"  class="btn bg-secondary d-flex justify-content-center text-primary" style="width: 30px;height: 30px;" onclick="hideSidebar()"><i class="fa fa-xmark" style="font-size: 1rem;"></i></button>
+
+<body class="bg-primary text-white" style="font-family: nova flat;">
+    <div class="modal fade" id="profileModal" tabindex="-1"  aria-labelledby="qrModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body bg-primary " style="min-height: 60vh;" id="qrbody">
+               <h2 class="text-center">Choose Profile Picture</h2>
+                <div class="flex-column justify-content-evenly align-items-center"   style="height: 90%;" id="displayqr" >
+                    <div class="w-100 " >
+                        <div class="avatar-list w-100"  id="profilepics">
+                            
+                        </div>
+                    </div>
+                    <button type="button" class="btn text-primary bg-secondary w-100" data-bs-dismiss="modal" >Close</button>
                 </div>
-                <div class="d-flex justify-content-between my-1 p-3" >
-                    <a  href="/client/dashboard" class="px-2 text-white text-center" style="text-decoration: none;line-height: inherit;font-size: 1.5rem;">Home</a>
+            </div>               
+          </div>
+        </div>
+    </div>  
+    <div id="sidebar" class="justify-content-end"
+        style="display: none; z-index: 999;height: 100vh;width: 100vw; position: fixed;top:0;left: 0;backdrop-filter: blur(5px);">
+        <div class="col-lg-8 col-md-6 col-sm-4 col-2 h-100" onclick="hideSidebar()"></div>
+        <div class="col-lg-4 col-md-6 col-sm-8 col-10 h-100 d-flex flex-column" style="background-color: #2F2F33;">
+            <div class="d-flex my-3 justify-content-between" style="padding: 1.5rem;">
+                <a href="" onclick="location.reload()"
+                    class=" h-100 d-flex gap-2 align-content-stretch text-decoration-none text-white">
+                    <div class="d-flex align-items-center"> <img class="logo " src="../images/logox.png"
+                            style="max-width: 30px;max-height: 30px;"></img></div>
+
+                    <div class="d-flex align-items-center h-100">
+                        <div style="font-size: 1rem;line-height: 100%;">URLSHORTENER</div>
+                    </div>
+                </a>
+                <button type="button" class="btn bg-secondary d-flex justify-content-center text-primary"
+                    style="width: 30px;height: 30px;" onclick="hideSidebar()"><i class="fa fa-xmark"
+                        style="font-size: 1rem;"></i></button>
+            </div>
+            <div class="d-flex justify-content-between my-1 p-3">
+                <a href="/client/dashboard" class="px-2 text-white text-center"
+                    style="text-decoration: none;line-height: inherit;font-size: 1.5rem;">Home</a>
+            </div>
+            <div class="d-flex align-items-center my-1 p-3" style="border-left: 5px solid var(--bs-secondary);">
+                <a href="/client/profile" class="px-2 text-white text-center"
+                    style="text-decoration: none;line-height: inherit;font-size: 1.5rem;">Profile</a>
+                    <img class="img-fluid" id="profile3" onclick="showCard()"
+                    style="height: 30px;width: 30px;border-radius: 50%;" src="../images/profiles/0.png" alt="profile">
+            </div>
+            <div class="d-flex justify-content-end p-1">
+                <a href="/api/user/logout" class="nav-item" style="cursor: pointer;font-size: 1.2rem !important;">Logout
+                    <i class="fa-solid text-white fa-right-from-bracket"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div id="snackbar"></div>
+        <nav class="py-1 my-4 d-flex justify-content-between align-items-center w-100" style="height: 8vh;">
+            <a href="" onclick="location.reload()"
+                class="w-25 h-100 d-flex gap-2 align-content-stretch text-decoration-none text-white">
+                <img class="logo  " src="../images/logox.png" style="width: 50px;max-height: 50px;"></img>
+                <div class="d-flex align-items-center h-100">
+                    <div style="font-size: 1.3rem;line-height: 100%;">URLSHORTENER</div>
                 </div>
-                <div class="d-flex justify-content-between my-1 p-3" style="border-left: 5px solid var(--bs-secondary);">
-                    <a  href="/client/profile" class="px-2 text-white text-center" style="text-decoration: none;line-height: inherit;font-size: 1.5rem;">Profile</a>
+            </a>
+            <div class="d-none d-md-flex justify-content-end align-items-center w-75 h-100 gap-5">
+                <img class="img-fluid" id="profile" onclick="showCard()"
+                    style="height: 50px;width: 50px;border-radius: 50%;" src="../images/profiles/0.png" alt="profile">
+            </div>
+            <div class=" py-2 d-flex d-md-none" style="height: 8vh;">
+                <button type="button" onclick="showSidebar()" class="btn h-100 p-0"><i
+                        class="fa-solid fa-bars-staggered text-secondary"
+                        style="font-size: 2rem;width: 50px;font-family: Font Awesome 6 Free;"></i></button>
+            </div>
+
+        </nav>
+        <div id="profilecard" class="w-100 "
+            style="height: 20vh;background-position: center;background-repeat: no-repeat;background-size: cover;z-index: 0 !important;">
+            <div class="w-100 h-100 card d-flex flex-column justify-content-around"
+                style="border-radius:0 !important;z-index: 0 !important;position:static;">
+                <h1 id="name" class="text-center text-white"></h1>
+            </div>
+
+            <div class="card flex-column" id="card"
+                style="min-height:30vh ;width: 270px;z-index: 1001;position: absolute;top: 12vh;right: 8vw;display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="p-2 col-lg-9">
+                        <div class="text-white" id="username" style="white-space:no-wrap;text-overflow: ellipsis;">
+                        </div>
+                        <div class="text-white" id="email" style="white-space:no-wrap;text-overflow: ellipsis;"></div>
+                    </div>
+                    <div class="col-lg-2 mx-1" onclick="hideCard()"><button class="btn bg-secondary">X</button></div>
+                </div>
+                <div class="d-flex justify-content-between my-1">
+                    <a href="/client/dashboard" class="px-2 text-white text-center"
+                        style="text-decoration: none;line-height: inherit;font-size: 1.1rem;">Home</a>
+                </div>
+                <div class="d-flex justify-content-between my-1" style="border-left: 5px solid var(--bs-secondary);">
+                    <a href="/client/profile" class="px-2 text-white text-center"
+                        style="text-decoration: none;line-height: inherit;font-size: 1.1rem;">Profile</a>
                 </div>
                 <div class="d-flex justify-content-end p-1">
-                    <a href="/api/user/logout" class="nav-item" style="cursor: pointer;font-size: 1.2rem !important;" >Logout <i class="fa-solid text-white fa-right-from-bracket" ></i></a>
+                    <a href="/api/user/logout" class="nav-item" style="cursor: pointer;">Logout <i
+                            class="fa-solid fa-right-from-bracket"></i></a>
                 </div>
             </div>
         </div>
-        <div class="container" >
-            <div id="snackbar" ></div>
-            <nav class="py-1 my-4 d-flex justify-content-between align-items-center w-100" style="height: 8vh;position: sticky;top:0">
-                <a href="" onclick="location.reload()" class="w-25 h-100 d-flex gap-2 align-content-stretch text-decoration-none text-white" >
-                    <img class="logo  " src="../images/logox.png" style="width: 50px;max-height: 50px;"></img>
-                    <div class="d-flex align-items-center h-100" ><div style="font-size: 1.3rem;line-height: 100%;">URLSHORTENER</div></div>
-                </a>
-                <div class="d-none d-md-flex justify-content-end align-items-center w-75 h-100 gap-5">
-                    <img class="img-fluid" onclick="showCard()" style="height: 40px;width: 40px;border-radius: 50%;" src="../images/profiles/0.png" alt="profile">
-                </div>
-                <div class=" py-2 d-flex d-md-none" style="height: 8vh;">
-                    <button type="button" onclick="showSidebar()" class="btn h-100 p-0"><i class="fa-solid fa-bars-staggered text-secondary" style="font-size: 2rem;width: 50px;font-family: Font Awesome 6 Free;"></i></button>
-                </div>
-                <div class="card flex-column" id="card" style="min-height:30vh ;width: 270px;z-index: 1001;position: absolute;top: 8vh;right: 0;display: none;">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="p-2 col-lg-10">
-                            <div class="text-white">username</div>
-                            <div class="text-white">Email......</div>
+        <div class="container-fluid d-flex flex-column align-items-center justify-content-around"
+            style="min-height: 80vh;">
+            <div class="col-lg-8 col-12 p-3">
+                <h1><i class="fa-solid fa-user"></i> Edit Profile</h1>
+            </div>
+            <div class="col-lg-8 col-12" style="min-height: 60vh;background-color: #2F2F33;">
+                <duv class="d-flex flex-lg-row flex-column">
+                    <div class="col-lg-9 p-4">
+                        <form id="profileform" method="post">
+                            <div class="col-lg-3 p-3 d-lg-none d-flex flex-column align-items-center "
+                                style="min-height: 120px;">
+                                <button class="btn bg-secondary" type="button" onclick="showModal()" style="position: relative;top:110px;left:30px  "> <i
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <img class="img-fluid" id="profile1"
+                                    style="height: 100px;width: 100px;border-radius: 50%;"
+                                    src=""  alt="profile">
+                            </div>
+                            <div class="d-flex flex-column my-3">
+                                <label for="usernamex">Username:</label>
+                                <input style="height: 40px;border-radius: 0.175rem;border: none;padding: 3px;"
+                                    id="usernamex" name="usernamex" type="text" placeholder="Username" readonly>
+                            </div>
+                            <div class="d-flex flex-column mb-3">
+                                <label for="namex">Name:</label>
+                                <input style="height: 40px;border-radius: 0.175rem;border: none;padding: 3px;"
+                                    id="namex" name="namex" type="text" placeholder="Name" required>
+                            </div>
+                            <div class="d-flex flex-column mb-3">
+                                <label for="emailx">Email:</label>
+                                <input style="height: 40px;border-radius: 0.175rem;border: none;padding: 3px;"
+                                    id="emailx" name="emailx" type="text" placeholder="Email" readonly>
+                            </div>
+                            <input  id="profilepic" name="profilepic" type="text"  value="" hidden>
+                            
+                            <button type="submit" class="w-100 btn bg-secondary text-primary my-3">Save Changes</button>
+                        </form>
+                        <div class="d-flex mb-3">
+                            <input class="form-check-input" style=" border-radius: 0.175rem;border: none;padding: 8px;"
+                                name="check" id="check" onchange="displayChangePass();" type="checkbox" value="check">
+                            <label for="check">&nbsp; Change Password</label>
                         </div>
-                        <div class="col-lg-2" onclick="hideCard()"><button class="btn bg-secondary">X</button></div>
+                        <form id="changepass" oninput="validateFormx()" method="post" class="flex-column" style="display: none;">
+                            <div class="d-flex flex-column mb-3">
+                                <label for="currentpassword">Current Password:</label>
+                                <input oninput="validateCurrPassword()" style="height: 40px;border-radius: 0.175rem;border: none;padding: 3px;"
+                                    id="currentpassword" name="currentpassword" type="password"
+                                    placeholder="Current Password" required>
+                            </div>
+                            <div class="d-flex flex-column mb-3">
+                                <label for="password">New Password:</label>
+                                <input oninput="validatePasswordx()" style="height: 40px;border-radius: 0.175rem;border: none;padding: 3px;"
+                                    id="password" name="password" type="password" placeholder="New Password" required>
+                            </div>
+                            <div class="d-flex flex-column mb-3">
+                                <label for="retypepassword" >Retype Password:</label>
+                                <input oninput="validateRePasswordx()" style="height: 40px;border-radius: 0.175rem;border: none;padding: 3px;"
+                                    id="retypepassword" name="retypepassword" type="password"
+                                    placeholder="Retype Password" required>
+                            </div>
+                            <label id="l2" class="col-12 p-2 bg-secondary text-primary" style="display: none;z-index: 1;flex-wrap: wrap;text-align: justify;">Password must contain at least 1 uppercase, lowercase, digit, specialsymbol(_,#,$,@) and minimum letngth eight</label>
+                            <button type="submit" class="w-100 btn bg-secondary text-primary my-3" id="resetbtn" disabled>Update Password
+                            </button>
+                        </form>
                     </div>
-                    <div class="d-flex justify-content-between my-1" >
-                        <a  href="/client/dashboard" class="px-2 text-white text-center" style="text-decoration: none;line-height: inherit;font-size: 1.1rem;">Home</a>
+                    <div class="col-lg-3 p-3 d-lg-flex flex-column d-none align-items-center"
+                        style="min-height: 420px;background-color: #3E3E41; ">
+                        <button class="btn bg-secondary" type="button" onclick="showModal()" style="position: relative;top:110px;left:30px;"> <i
+                                class="fa-solid fa-pen-to-square"></i></button>
+                        <img class="img-fluid" id="profile2" style="height: 100px;width: 100px;border-radius: 50%;"
+                            src="" alt="profile"></img>
                     </div>
-                    <div class="d-flex justify-content-between my-1" style="border-left: 5px solid var(--bs-secondary);">
-                        <a  href="/client/profile" class="px-2 text-white text-center" style="text-decoration: none;line-height: inherit;font-size: 1.1rem;">Profile</a>
-                    </div>
-                    <div class="d-flex justify-content-end p-1">
-                        <a href="/api/user/logout" class="nav-item" style="cursor: pointer;">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
-                    </div>
-                </div>
-            </nav>
+            </div>
         </div>
-            <script>
-                const card=document.getElementById('card');
-                window.addEventListener( "pageshow", function ( event ) {
-                    let historyTraversal = event.persisted ||
-                        ( typeof window.performance != "undefined" &&
-                            window.performance.navigation.type === 2 );
-                    if ( historyTraversal ) {
-                        // Handle page restore.
-                        window.location.reload();
-                    }
-                });
-                function showCard(){
-                    if(card.style.display==="none"){
-                        card.style.display="flex";
-                    }else{
-                        card.style.display="none";
-                    }
-                }
-                function hideCard(){
-                    card.style.display="none";
-                }
-            </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" integrity="sha512-pUhApVQtLbnpLtJn6DuzDD5o2xtmLJnJ7oBoMsBnzOkVkpqofGLGPaBJ6ayD2zQe3lCgCibhJBi4cj5wAxwVKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.3/axios.min.js" integrity="sha512-JWQFV6OCC2o2x8x46YrEeFEQtzoNV++r9im8O8stv91YwHNykzIS2TbvAlFdeH0GVlpnyd79W0ZGmffcRi++Bw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <script src="../js/profile.js"></script>
-    </body>
+    </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+        window.addEventListener("pageshow", function (event) {
+            let historyTraversal = event.persisted ||
+                (typeof window.performance != "undefined" &&
+                    window.performance.navigation.type === 2);
+            if (historyTraversal) {
+                // Handle page restore.
+                window.location.reload();
+            }
+        });
+        function showCard() {
+            if (card.style.display === "none") {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
+        }
+        function hideCard() {
+            card.style.display = "none";
+        }
+        function displayChangePass() {
+            if (document.getElementById('check').checked) {
+                // console.log(document.getElementById('check').checked);
+                document.getElementById('changepass').style.display = "flex";
+            } else {
+                document.getElementById('changepass').style.display = "none";
+            }
+        }
+        function showModal(){
+            const myModal = new bootstrap.Modal(document.getElementById('profileModal'), focus);
+            myModal.show();
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"
+        integrity="sha512-pUhApVQtLbnpLtJn6DuzDD5o2xtmLJnJ7oBoMsBnzOkVkpqofGLGPaBJ6ayD2zQe3lCgCibhJBi4cj5wAxwVKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.3/axios.min.js"
+        integrity="sha512-JWQFV6OCC2o2x8x46YrEeFEQtzoNV++r9im8O8stv91YwHNykzIS2TbvAlFdeH0GVlpnyd79W0ZGmffcRi++Bw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="../js/profile.js"></script>
+    <script src="../js/validate.js"></script>
+</body>
+
 </html>

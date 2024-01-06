@@ -1,9 +1,11 @@
 const express=require("express");
-const {getProfile,registerUser, loginUser} = require("../controller/user");
+const {getProfile,registerUser, loginUser, updateProfile,resetPassword} = require("../controller/user");
 const validateToken = require("../middleware/validateTokenHandler");
 const router=express.Router();
 router.get("/profile",validateToken, getProfile);
+router.put("/profile",validateToken, updateProfile);
 router.post("/register",registerUser);
+router.post("/resetpassword",validateToken,resetPassword);
 router.post("/login",loginUser);
 router.get("/logout",(req,res)=>{
     res.clearCookie('token');

@@ -11,9 +11,9 @@ const getProfile = asyncHandler( async (req, res) => {
     return;
   }
   const user=await User.findById(req.user.id);
-  console.log(user);
+  // console.log(user);
   res.status(200);
-  res.json({status:200, message: 'Fetched User Profile',profile:{username:user.username,fullname:user.fullname,email:user.email}})
+  res.json({status:200, message: 'Fetched User Profile',profile:{username:user.username,fullname:user.fullname,email:user.email,profile:user.profile}})
   return;
 });
 const registerUser = asyncHandler(async (req, res) => {
@@ -108,4 +108,51 @@ const loginUser = asyncHandler(async (req, res) => {
     }
   }
 });
-module.exports = { getProfile, registerUser, loginUser }
+const updateProfile=asyncHandler(async (req,res)=>{
+  if(req.user===undefined){
+    console.log("unauthorized");
+    res.status(401);
+    res.json({status:401, message: 'Not Authorized!!'});
+    return;
+  }
+  const {name,profile}=req.body;
+  const user=await User.findByIdAndUpdate(req.user.id,{fullname:name,profile:profile},{new:true});
+  if(user){
+    res.json({status:202, message: 'Profile Updated!!'});
+    return;
+  }
+  res.json({status:400, message: 'Profile Not Updated!!' })
+})
+const resetPassword=asyncHandler(async (req,res)=>{
+  if(req.user===undefined){
+    console.log("unauthorized");
+    res.status(401);
+    res.json({status:401, message: 'Not Authorized!!'});
+    return;
+  }
+  const {currentpassword,password,retypepassword}=req.body;
+  let passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[_@#$])(?=.*\d).{8,}$/;
+  const user=await User.findById(req.user.id);
+  if(await bcrypt.compare(currentpassword,user.password)){
+    console.log(currentpassword);
+    console.log(password);
+    console.log(retypepassword);
+    if(currentpassword.match(password)){
+      res.json({status:400, message: 'Same Password!!' });
+      return;
+    }
+    if(passwordRegex.test(password)&&passwordRegex.test(retypepassword)&&password.match(retypepassword)){
+      const hashedPassword = await bcrypt.hash(password, 10)
+      await User.findByIdAndUpdate(req.user.id,{password:hashedPassword});
+      res.json({status:202, message: 'Password Updated!!' });
+      return;
+    }else{
+      res.json({status:400, message: 'Invalid!!' });
+      return;
+    }
+  }else{
+    res.json({status:400, message: 'Invalid Password!!' });
+    return
+  }
+})
+module.exports = { getProfile, registerUser, loginUser,updateProfile,resetPassword}

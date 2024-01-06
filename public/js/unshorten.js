@@ -6,7 +6,7 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
-    checkloginstatus();
+    await checkloginstatus();
     const form=document.getElementById("urlform");
     let url_list=document.getElementById("urls");
     const sidebar=document.getElementById("sidebar");

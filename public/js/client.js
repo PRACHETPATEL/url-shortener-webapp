@@ -6,7 +6,7 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
-    checkloginstatus();
+    await checkloginstatus();
     const api=location.protocol+"//"+ location.hostname+":"+location.port;
     const form=document.getElementById("urlform");
     let url_list=document.getElementById("urls");

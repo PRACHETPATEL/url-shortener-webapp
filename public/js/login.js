@@ -6,7 +6,7 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
-    checkloginstatus();
+    await checkloginstatus();
     const sidebar=document.getElementById("sidebar");
     const form=document.getElementById('loginform');
     let showSnackBar=(alert,message,status,backgroundColor,ms)=>{
