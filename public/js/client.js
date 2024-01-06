@@ -7,8 +7,8 @@ let checkloginstatus=async()=>{
 }
 window.addEventListener('load',async ()=>{
     checkloginstatus();
-    const form=document.getElementById("urlform");
     const api=location.protocol+"//"+ location.hostname+":"+location.port;
+    const form=document.getElementById("urlform");
     let url_list=document.getElementById("urls");
     let apiurlshorten=api+"/api/url/shorten";
     const sidebar=document.getElementById("sidebar");

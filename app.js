@@ -7,6 +7,7 @@ require("dotenv").config()
 const logger=require("morgan");
 const errorHandler = require("./middleware/errorHandler");
 const connectDB = require("./db/connectDb");
+const useragent = require('express-useragent'); 
 const cookieParser = require('cookie-parser');
 
 const redirectRouter=require("./routes/redirectRouter")
@@ -16,6 +17,7 @@ app.set('trust proxy', true);
 app.use(express.json());
 app.use(cookieParser())
 app.use(logger("tiny"));
+app.use(useragent.express());
 app.use(express.static(path.join(__dirname,"./public")));
 app.use((req, res, next) => {
     if (req.path.endsWith('/') && req.path.length > 1) {

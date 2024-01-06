@@ -30,6 +30,7 @@
   --bs-gray-900: #212529;
   --bs-primary: #242428;
   --bs-secondary: #FFDD95;
+  --bs-tertiary: #5BA8A0;
   --bs-success: #198754;
   --bs-info: #0dcaf0;
   --bs-warning: #ffc107;
@@ -38,6 +39,7 @@
   --bs-dark: #212529;
   --bs-primary-rgb: 36 , 36, 40;
   --bs-secondary-rgb: 255, 211, 149;
+  --bs-tertiary-rgb: 91, 168, 160;
   --bs-success-rgb: 25, 135, 84;
   --bs-info-rgb: 13, 202, 240;
   --bs-warning-rgb: 255, 193, 7;
@@ -2334,7 +2336,7 @@ textarea.form-control-lg {
     border-radius: 2px;
     padding: 16px;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 50%;  
     top: 30px;
     font-size: 17px;
@@ -7121,7 +7123,9 @@ to {top: 0; opacity: 0;}
 .bg-secondary {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important; }
-
+.bg-tertiary {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-tertiary-rgb), var(--bs-bg-opacity)) !important; }
 .bg-success {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important; }

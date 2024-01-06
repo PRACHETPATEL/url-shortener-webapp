@@ -45,9 +45,14 @@ window.addEventListener('load',async ()=>{
             <button type="button" class="btn bg-secondary w-25" onclick=copyUrl("${longurl.data.url}")  type="submit" style="height: 7vh;">Copy</button>
         </div>
         <div class="w-100 d-flex flex-row">
-            <label class="text-white col-lg-2 col-md-3 col-4" style="font-size: 1.2rem;" for=url-1>Short url: </label>
-            <a class="col-lg-10 col-md-9 col-8" href="${url}" id="url-1" target="_blank" style="text-overflow: ellipsis;white-space:nowrap;overflow: hidden;font-size: 1.2rem;">${url}</a>
-        </div>`
+            <label class="text-white col-lg-2 col-md-3 col-4" style="font-size: 1.2rem;" for=url-1>Short url </label>
+            <a class="col-lg-10 col-md-9 col-8 nav-item" href="${url}" id="url-1" target="_blank" style="text-overflow: ellipsis;white-space:nowrap;overflow: hidden;font-size: 1.2rem;">${url}</a>
+        </div>
+        <div class="w-100 d-flex flex-row">
+            <label class="text-white col-lg-2 col-md-3 col-4" style="font-size: 1.2rem;" for=url-1>Visits </label>
+            <div class="col-lg-10 col-md-9 col-8 nav-item"  id="url-1" style="font-size: 1.2rem;">${longurl.data.visits}</div>
+        </div>
+        `
         showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> ${longurl.data.message}`,"#198754a4");
         }else{
             showSnackBar("alert-danger",`<i class="fa-solid fa-check-double "></i> ${longurl.data.message}`,"#198754a4");

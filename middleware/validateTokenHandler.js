@@ -5,6 +5,7 @@ const validateToken=asyncHandler(async (req,res,next)=>{
     let token;
     let authstatus=req.cookies.token?true:false;
     // console.log(req.cookies.token);
+    // console.log(req.cookies.logged_in);
     if(authstatus){
         console.log("Access Token Being Verified...");
         token=req.cookies.token;

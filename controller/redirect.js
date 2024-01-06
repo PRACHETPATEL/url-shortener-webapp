@@ -2,10 +2,25 @@ const asyncHandler = require('express-async-handler')
 const Url = require('../model/url.model')
 const { default: mongoose } = require('mongoose')
 const { updateShortenUrl } = require('./url')
-const UrlMetadata = require('../model/urlmetadata.model')
+const UrlMetadata = require('../model/urlmetadata.model');
+const moment = require('moment');
 const redirectURL = asyncHandler(async (req, res) => {
   const url = `${req.protocol}://${req.get('host')}/${req.params.id}`
-  const check = await Url.findOne({ shortened_url: url })
+  const check = await Url.findOne({ shortened_url: url });
+  if(req.user!==undefined){
+    const ip = req.ip || req.connection.remoteAddress;
+
+    const currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
+  
+    const browser = req.useragent.browser;
+    
+    const device = req.useragent.isMobile ? 'Mobile' : req.useragent.isDesktop ? 'Desktop' : 'Unknown';
+  
+    const dayOfWeek = moment().format('dddd');
+  
+    const operatingSystem = req.useragent.os;
+    
+  }
   let date = new Date();
   if (check) {
     const checkmetadata = await UrlMetadata.find({ url_id: check.id })

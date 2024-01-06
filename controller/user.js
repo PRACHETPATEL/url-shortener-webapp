@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler')
 const User = require('../model/user.model')
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
+const Url = require('../model/url.model');
 const getProfile = asyncHandler( async (req, res) => {
   if(req.user===undefined){
     console.log("unauthorized");
@@ -66,9 +67,16 @@ const loginUser = asyncHandler(async (req, res) => {
           id:user.id
         },
       },process.env.ACCESS_TOKEN_SECERT,{expiresIn:"1440m"});
-      console.log(accessToken);
-      res.cookie('token',accessToken,{ maxAge: 864000000, httpOnly: true, secure: true, sameSite: 'none'  });
-      res.cookie('logged_in',{"value":"yes"},{ maxAge: 864000000 }); 
+      // console.log(accessToken);
+      res.cookie('token',accessToken,{ maxAge: 864000000, httpOnly: true });
+      res.cookie('logged_in',{"value":"yes"},{ maxAge: 864000000, httpOnly: true  }); 
+      const cookieurls=req.cookies.urls;
+      if(cookieurls){
+        cookieurls.forEach(async(element)=>{
+          await Url.findByIdAndUpdate(element.url._id,{user_id:user.id});
+        })
+      }
+      res.clearCookie("urls");
       res.json({status:200,message:"Logged IN Successfully!!"});
       return;
     }else{
@@ -85,8 +93,8 @@ const loginUser = asyncHandler(async (req, res) => {
           },
         },process.env.ACCESS_TOKEN_SECERT,{expiresIn:"1440m"});
         console.log(accessToken);
-        res.cookie('token',accessToken,{ maxAge: 864000000, httpOnly: true, secure: false, sameSite: 'none'  });  
-        res.cookie('logged_in',{"value":"yes"},{ maxAge: 864000000 });  
+        res.cookie('token',accessToken,{ maxAge: 864000000, httpOnly: true  });  
+        res.cookie('logged_in',{"value":"yes"},{ maxAge: 864000000, httpOnly: true  });  
         res.json({status:200,message:"Logged IN Successfully!!"});
         return;
       }else{

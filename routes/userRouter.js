@@ -11,12 +11,12 @@ router.get("/logout",(req,res)=>{
     const url = `${req.protocol}://${req.get('host')}/client/home`
     res.redirect(url);
 });
-router.get("/getloginstatus",(req,res)=>{
+router.get("/getloginstatus",validateToken,(req,res)=>{
     const logged_in=req.cookies.logged_in?true:false;
     if(logged_in){
-        res.json({status:200,message:"User Logged In"})
+        res.json({status:200,message:"User Logged In",user_id:req.user.id});
         return;
     }
-    res.json({status:403,message:"User Not Logged In"})
+    res.json({status:403,message:"User Not Logged In"});
 });
 module.exports=router;
