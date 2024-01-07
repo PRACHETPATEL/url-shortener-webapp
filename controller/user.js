@@ -74,7 +74,13 @@ const loginUser = asyncHandler(async (req, res) => {
       const cookieurls=req.cookies.urls;
       if(cookieurls){
         cookieurls.forEach(async(element)=>{
-          await Url.findByIdAndUpdate(element.url._id,{user_id:user.id});
+          let check=await Url.findOne({user_id:user.id,url:element.url.url});
+          // console.log(check);
+          if(!check){
+            await Url.findByIdAndUpdate(element.url._id,{user_id:user.id});
+          }else{
+            await Url.findByIdAndDelete(element.url._id);
+          }
         })
       }
       res.clearCookie("urls");

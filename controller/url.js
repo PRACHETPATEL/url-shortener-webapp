@@ -6,22 +6,16 @@ const UrlMetadata = require('../model/urlmetadata.model')
 
 const addUrl = asyncHandler(async (req, res) => {
   const { url } = req.body
-  console.log(url);
   if (!url) {
     res.json({ status: 400, message: 'URL Required!!' })
     return
   }
-  const checklongurl=await Url.findOne({url:url});
-  if(checklongurl){
-    res.status(400);
-    res.json({status:400,message:"Url Already Shortened!!"});
-    return;
-  }
+  
   let urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/
   let shortenedurl = `${req.protocol}://${req.get('host')}/`
   let urlobj = new Object()
   const check = await Url.findOne({ shortened_url: url })
-  if (check || url.includes(`${req.protocol}://${req.get('host')}/`) || url.includes(`http://${req.get('host')}/`)) {
+  if (check || url.includes(`${req.protocol}://${req.get('host')}/`) || url.includes(`https://${req.get('host')}/`)) {
     res.status(400)
     res.json({ status: 400, message: 'Url Cannot Be Shortened' })
     return
@@ -36,8 +30,21 @@ const addUrl = asyncHandler(async (req, res) => {
       if (req.user === undefined) {
         if(urlcookie && urlcookie.length>=3){
           res.status(400);
-          res.json({status:400,message:" Please Login <br> To shorten and <br> manage more urls"});
+          res.json({status:400,message:"Please Login <br> To shorten and <br> manage more urls"});
           return;
+        }
+        if(urlcookie){
+          let check=false;
+          urlcookie.forEach(element=>{
+            if(element.url.url===url){
+              check=true;
+            }
+          });
+          if(check){
+            res.status(400);
+            res.json({ status: 400, message: 'Url Already Shortened' })
+            return;
+          }
         }
         urlobj = await Url.create({
           user_id: new mongoose.Types.ObjectId('5f6a6b7c8d9e1f2a3b4c5d6e'),
@@ -54,6 +61,12 @@ const addUrl = asyncHandler(async (req, res) => {
           res.cookie('urls',urlcookie,{ maxAge: 864000000});
         }
       } else {
+        const checklongurl=await Url.findOne({user_id:req.user.id,url:url});
+        if(checklongurl){
+          res.status(400);
+          res.json({ status: 400, message: 'Url Already Shortened' })
+          return;
+        }
         urlobj = await Url.create({
           user_id: req.user.id,
           url: url,
@@ -115,7 +128,7 @@ const deleteShortenUrl = asyncHandler(async (req, res) => {
     return
   }
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-    console.log("valid");
+    // console.log("valid");
     const urls = await Url.findByIdAndDelete(req.params.id);
     await UrlMetadata.deleteMany({url_id:req.params.id});
     if (urls != null) {
@@ -134,12 +147,17 @@ const updateShortenUrl = asyncHandler(async (req, res) => {
   const { url } = req.body
   let urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/
   const check = await Url.findOne({ shortened_url: url });
-  if (check || url.includes(`${req.protocol}://${req.get('host')}/`)) {
+  if (check || url.includes(`${req.protocol}://${req.get('host')}/`) || url.includes(`https://${req.get('host')}/`)) {
     // console.log(check)
     res.json({ status: 400, message: 'Url Already Shortened' })
     return
   }
   if (mongoose.Types.ObjectId.isValid(req.params.id) && urlRegex.test(url)) {
+    let check=await Url.findOne({user_id:req.user.id,url:url});
+    if(check){
+      res.json({status:400, message: 'Same URL Exists!!' });
+      return;
+    }
     const updatedurl = await Url.findByIdAndUpdate(
       req.params.id,
       { url: url },
