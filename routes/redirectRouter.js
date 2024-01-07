@@ -26,4 +26,7 @@ router.route("/client/profile").get((req,res)=>{
     res.render("profile");
 })
 router.route("/:id").get(redirectURL);
+router.route("/").get((req,res)=>{
+    res.redirect("/client/home");
+});
 module.exports=router;
