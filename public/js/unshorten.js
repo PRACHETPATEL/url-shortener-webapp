@@ -55,7 +55,7 @@ window.addEventListener('load',async ()=>{
         `
         showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> ${longurl.data.message}`,"#198754a4");
         }else{
-            showSnackBar("alert-danger",`<i class="fa-solid fa-check-double "></i> ${longurl.data.message}`,"#198754a4");
+            showSnackBar("alert-danger",`<i class="fa-solid fa-bomb "></i> ${longurl.data.message}`,"#dc354696");
         }
     })
 });

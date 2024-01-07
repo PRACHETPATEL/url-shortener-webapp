@@ -21,7 +21,7 @@ const addUrl = asyncHandler(async (req, res) => {
   let shortenedurl = `${req.protocol}://${req.get('host')}/`
   let urlobj = new Object()
   const check = await Url.findOne({ shortened_url: url })
-  if (check || url.includes(`${req.protocol}://${req.get('host')}/`)) {
+  if (check || url.includes(`${req.protocol}://${req.get('host')}/`) || url.includes(`http://${req.get('host')}/`)) {
     res.status(400)
     res.json({ status: 400, message: 'Url Cannot Be Shortened' })
     return
