@@ -222,7 +222,19 @@ const getStats=asyncHandler(async(req,res)=>{
   }
   console.log(req.params.id);
   const url=await Url.findById(req.params.id);
+  if(!url){
+    res.json({status:404,message:"Url Not Found!!"});
+    return;
+  }else if(url.user_id.toString()!==req.user.id){
+    res.json({status:400,message:"Not Valid ID!!"});
+    return;
+  }
   const urlmetadata=await UrlMetadata.find({url_id:req.params.id});
+  console.log(urlmetadata);
+  if(urlmetadata.length===0){
+    res.json({status:404,message:"Url Not Found!!"});
+    return;
+  }
   const urlstatistic=await UrlStatistic.find({url_id:req.params.id});
   const laststat=urlstatistic[urlstatistic.length-1];
   const date=moment();
@@ -251,7 +263,7 @@ const getStats=asyncHandler(async(req,res)=>{
       months[12]=dateMoment.month();
     }
   })
-  res.json({status:200,message:"Stats Fetched",total_visits:url.visits,last_visit_time:lastvisit,week_visits:thisWeekVisitsWithDays,visits_percent_days:visitspercentageperdays,visits_per_hour:hours,visits_per_month:months});
+  res.json({status:200,message:"Stats Fetched",total_visits:url.visits,last_visit_time:lastvisit,week_visits:thisWeekVisitsWithDays,visits_percent_days:visitspercentageperdays,visits_per_hour:hours,visits_per_month:months,longurl:url.url,shorturl:url.shortened_url});
 });
 module.exports = {
   addUrl,
