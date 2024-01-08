@@ -3,6 +3,7 @@ const Url = require('../model/url.model')
 const { default: mongoose } = require('mongoose')
 const nextCombination = require('../utilities/nextString')
 const UrlMetadata = require('../model/urlmetadata.model')
+const UrlStatistic = require('../model/urlstatistic.model')
 
 const addUrl = asyncHandler(async (req, res) => {
   const { url } = req.body
@@ -87,9 +88,7 @@ const addUrl = asyncHandler(async (req, res) => {
           shortened_url: shortenedurl + 'aaaaa',
           visits: 0
         })
-        if(req.cookies.urls===undefined){
-          res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000});
-        }
+        res.cookie('urls',[{url:urlobj}],{ maxAge: 864000000});
       } else {
         urlobj = await Url.create({
           user_id: req.user.id,
@@ -131,7 +130,9 @@ const deleteShortenUrl = asyncHandler(async (req, res) => {
     // console.log("valid");
     const urls = await Url.findByIdAndDelete(req.params.id);
     await UrlMetadata.deleteMany({url_id:req.params.id});
+    await UrlStatistic.deleteMany({url_id:req.params.id});
     if (urls != null) {
+
       res.json({status:201, message: "URL's Deleted Successfully!!", urls: urls })
       return
     }
@@ -166,6 +167,8 @@ const updateShortenUrl = asyncHandler(async (req, res) => {
       }
     );
     if (updatedurl != null) {
+      await UrlMetadata.deleteMany({url_id:req.params.id});
+      await UrlStatistic.deleteMany({url_id:req.params.id});
       res.json({
         status:202,
         message: "URL's Updated Successfully!!"
@@ -194,9 +197,11 @@ const deleteGuestCookie=async (req,res)=>{
     let urls=req.cookies.urls;
     // console.log(urls,req.params.id,urls.length);
     if(req.params.id<urls.length){
+      
       // console.log(urls[req.params.id].url._id);
       await Url.findByIdAndDelete(urls[req.params.id].url._id);
       await UrlMetadata.deleteMany({url_id:urls[req.params.id].url._id});
+      await UrlStatistic.deleteMany({url_id:urls[req.params.id].url._id});
       urls.splice(req.params.id,1)
       // console.log(urls);
       res.cookie("urls",urls,{maxAge:864000000});  
@@ -206,11 +211,18 @@ const deleteGuestCookie=async (req,res)=>{
   };
   res.json({status:400,message:"no url was found!!"})
 }
+const getStats=(req,res)=>{
+  if(req.user.id===undefined){
+    res.json({status:401,message:"Not Authorized!!"});
+    return;
+  }
+}
 module.exports = {
   addUrl,
   getUnshortenUrl,
   deleteShortenUrl,
   updateShortenUrl,
   getAllUrl,
-  deleteGuestCookie
+  deleteGuestCookie,
+  getStats
 }
