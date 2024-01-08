@@ -165,12 +165,8 @@ window.addEventListener('load',async ()=>{
       showSnackBar("alert-success",`<i class="fa-solid fa-check "></i> Url Copied`,"#198754a4");
     }
     window.viewStats=async (id,objid)=>{
-        let status=await axios.get(api+"/api/user/getloginstatus");
-        if(status.data.status!==200){
-            showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i> Please Login<br> To View Stats","#dc354696");
-        }else{
-            console.log("redirecting...",status.data.user_id);
-        }
+        // console.log(objid);
+        window.location.href="/client/stats/"+objid
     }
     form.addEventListener('submit',async(e)=>{
         e.preventDefault();

@@ -4,6 +4,7 @@ const { default: mongoose } = require('mongoose')
 const nextCombination = require('../utilities/nextString')
 const UrlMetadata = require('../model/urlmetadata.model')
 const UrlStatistic = require('../model/urlstatistic.model')
+const moment = require('moment')
 
 const addUrl = asyncHandler(async (req, res) => {
   const { url } = req.body
@@ -211,12 +212,47 @@ const deleteGuestCookie=async (req,res)=>{
   };
   res.json({status:400,message:"no url was found!!"})
 }
-const getStats=(req,res)=>{
+const getStats=asyncHandler(async(req,res)=>{
   if(req.user.id===undefined){
     res.json({status:401,message:"Not Authorized!!"});
     return;
   }
-}
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+    res.json({status:400,message:"Not Valid ID!!"});
+  }
+  console.log(req.params.id);
+  const url=await Url.findById(req.params.id);
+  const urlmetadata=await UrlMetadata.find({url_id:req.params.id});
+  const urlstatistic=await UrlStatistic.find({url_id:req.params.id});
+  const laststat=urlstatistic[urlstatistic.length-1];
+  const date=moment();
+  let difference = moment.duration(date.diff(laststat.date));
+  let lastvisit= moment.duration(difference).humanize();
+  const thisWeekVisitsWithDays = [0,0,0,0,0,0,0];// start from sunday
+  const visitspercentageperdays = [0,0,0,0,0,0,0];// start from sunday
+  const hours = new Array(25).fill(0); //start from sunday
+  const months = new Array(12).fill(0); //start from sunday
+  urlmetadata.forEach(data => {
+    const dateMoment = moment(data.date);
+     if(dateMoment.isSame(date, 'week')){
+      let day=dateMoment.day();
+      thisWeekVisitsWithDays[day]=data.visitsperday;
+     }
+  });
+  urlstatistic.forEach(data=>{
+    const dateMoment = moment(data.date);
+    visitspercentageperdays[dateMoment.day()]+=1;  
+    if(date.diff(dateMoment, 'hours') <= 23){
+      hours[dateMoment.hour()]+=1;
+      hours[24]=dateMoment.hour();
+    }
+    if(date.diff(dateMoment, 'months') <= 11){
+      months[dateMoment.month()]+=1;
+      months[12]=dateMoment.month();
+    }
+  })
+  res.json({status:200,message:"Stats Fetched",total_visits:url.visits,last_visit_time:lastvisit,week_visits:thisWeekVisitsWithDays,visits_percent_days:visitspercentageperdays,visits_per_hour:hours,visits_per_month:months});
+});
 module.exports = {
   addUrl,
   getUnshortenUrl,
