@@ -11,7 +11,6 @@ window.addEventListener('load',async ()=>{
     const loader=document.getElementById('mainloader');
     body.style.display="none";
     loader.style.display="flex";
-    const ctx = document.getElementById('myChart');
     const sidebar=document.getElementById("sidebar");
     const profile=document.getElementById('profile');
     const profile3=document.getElementById('profile3');
@@ -38,7 +37,7 @@ window.addEventListener('load',async ()=>{
         x.innerHTML=message;
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     }
-    let displayBarGraph=(index,x_axis,y_axis)=>{
+    let displayBarGraph=(index,x_axis,y_axis,ctx)=>{
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -69,9 +68,14 @@ window.addEventListener('load',async ()=>{
             },
             plugins: {
                 legend: {
-                  display: false
+                    labels: {
+                        // This more specific font property overrides the global property
+                        font: {
+                            size: 14
+                        }
+                    }
                 }
-              }
+            }
         });
     }
     let response=await axios.get(api+"/api/url/stats/"+url_id);
@@ -99,7 +103,16 @@ window.addEventListener('load',async ()=>{
         }else{
             document.getElementById("lastvisit").innerText="Last Visit: "+last_visit_time +" ago";
         }
-        displayBarGraph(0,['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], week_visits);
+        
+        const ctx1 = document.getElementById('days');
+        const ctx2 = document.getElementById('hours');
+        const ctx3 = document.getElementById('months');
+        displayBarGraph(0,['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], week_visits,ctx1);
+        displayBarGraph(0,[
+            '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11',
+            '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'
+          ], visits_per_hour,ctx2);
+        displayBarGraph(0,["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"], visits_per_month,ctx3);
         body.style.display="block";
         loader.style.display="none";
     }else if(response.data.status===400||response.data.status===404){
@@ -128,7 +141,6 @@ window.addEventListener('load',async ()=>{
         },500);
     }
     window.copyUrl=()=>{
-        
       let tempInput = document.createElement('input');
       tempInput.value = shorturl;
       document.body.appendChild(tempInput);

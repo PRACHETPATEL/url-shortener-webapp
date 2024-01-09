@@ -118,17 +118,36 @@
                 </div>
             </div>
         </nav>
-        <div class="container  text-white d-flex flex-column flex-lg-row justify-content-center al w-100 my-5">
-            <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap p-1" style="background-color: #2F2F33;"><div id="shorturl" style="font-size: 1.2rem;"></div> <div class="d-flex flex-wrap w-50" ><a  target="_blank" id="longurl" href="#" style="white-space: wrap;text-overflow:inherit;" class="nav-item"></a></div></div>
+        <div class="container  text-white d-flex flex-column flex-lg-row justify-content-center al w-100 mt-5">
+            <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap p-1" style="background-color: #2F2F33;"><div id="shorturl" style="font-size: 1.35rem;"></div> <div class="d-flex flex-wrap w-50" ><a  target="_blank" id="longurl" href="#" style="white-space: wrap;text-overflow:inherit;" class="nav-item"></a></div></div>
             <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap p-1" style="background-color: #2F2F33;">
-                <div class="w-100 d-flex  justify-content-lg-end  gap-4"><i class="nav-item fa-solid fa-qrcode" title="generate QRcode" onclick=generateQR()  style="font-size: 1.5rem;"></i><i class="nav-item fa-solid fa-copy" title="Copy Short URL" onclick=copyUrl() style="font-size: 1.5rem;"></i>  <a id="shorturl2" target="_blank" href="#" class="nav-item"><i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 1.5rem;"></i></a></div>
-                <div class="w-100 d-flex flex-column flex-lg-row mt-2 justify-content-lg-between  gap-2"><div id="totalvisits"></div><div id="lastvisit"></div></div>
+                <div class="w-100 d-flex  justify-content-lg-end justify-content-evenly gap-4"><i class="nav-item fa-solid fa-qrcode" title="generate QRcode" onclick=generateQR()  style="font-size: 1.5rem;"></i><i class="nav-item fa-solid fa-copy" title="Copy Short URL" onclick=copyUrl() style="font-size: 1.5rem;"></i>  <a id="shorturl2" target="_blank" href="#" class="nav-item"><i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 1.5rem;"></i></a></div>
+                
             </div>
         </div>
-        <div class="container text-white  d-flex justify-content-center" style="height: 300px;">
-            <canvas class="text-white col-lg-6 col-12" style="height: 100%;" id="myChart"></canvas>
+        <div class="container  text-white d-flex flex-column flex-lg-row justify-content-center al w-100 mb-5">
+            <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap p-1" style="background-color: #2F2F33;"><div id="totalvisits"></div><div id="lastvisit"></div></div>
+            <div class="col-lg-3 mb-3  p-1 d-flex justify-content-lg-end justify-content-center align-items-center" style="background-color: #2F2F33;">
+               <div class="d-flex gap-3">
+                <div>
+                    <a  class="text-secondary btn " style="text-decoration: none;" onclick="viewHoursStats()" id="hour" href="#hours">Hours</a>
+                </div>
+                <div >
+                  <a  class="text-secondary btn btn-outline-secondary" style="text-decoration: none;" id="day" onclick="viewDaysStats()" href="#days">Days</a>
+                </div>
+                <div class="">
+                  <a  class="text-secondary btn" style="text-decoration: none;" onclick="viewMonthsStats()" id="month" href="#months">Months</a>
+                </div>
+            </div>
+            </div>
         </div>
-        <div class="w-100 d-flex flex-column align-items-center gap-3 mt-5 pt-5" style="min-height: 8vh;">
+        <div class="container text-white  d-flex justify-content-center w-100 tab-content">
+            <canvas class="text-white col-lg-6 col-12 " style="min-height: 300px;display: none;" id="hours" ></canvas>
+            <canvas class="text-white col-lg-6 col-12 " style="min-height: 300px;" id="days"></canvas>
+            <canvas class="text-white col-lg-6 col-12 " style="min-height: 300px;display: none;" id="months"></canvas>
+
+        </div>
+        <div class="w-100 d-flex flex-column align-items-center gap-3 pt-5" style="min-height: 8vh;">
             <div class="d-flex flex-wrap flex-column align-items-center" style="font-size: 1.2rem;font-weight: 500;cursor: default;">
                 <div>&copy; 2023 <a class="nav-item" style="font-size: 1.2rem;" href="https://prachet.me">prachet.me</a> </div> 
                 <div>Developed By Prachet Patel</div>
@@ -170,7 +189,39 @@
         function hideCard() {
             card.style.display = "none";
         }
-    
+        const ctx1 = document.getElementById('days');
+        const ctx2 = document.getElementById('hours');
+        const ctx3 = document.getElementById('months');
+        const btn1=document.getElementById('day');
+        const btn2=document.getElementById('hour');
+        const btn3=document.getElementById('month');
+        function viewHoursStats(){
+            let element=document.querySelector('.btn-outline-secondary');
+            element.classList.remove('btn-outline-secondary');
+            ctx2.style.display="block";
+            btn2.classList.add('btn-outline-secondary');
+            ctx1.style.display="none";
+            ctx3.style.display="none";
+        }
+        function viewDaysStats(){
+            let element=document.querySelector('.btn-outline-secondary');
+            element.classList.remove('btn-outline-secondary');
+            ctx1.style.display="block";
+            console.log(btn1.classList);
+            btn1.classList.add('btn-outline-secondary');
+            
+            console.log(btn1.classList);
+            ctx2.style.display="none";
+            ctx3.style.display="none";
+        }
+        function viewMonthsStats(){
+            let element=document.querySelector('.btn-outline-secondary');
+            element.classList.remove('btn-outline-secondary');
+            ctx3.style.display="block";
+            btn3.classList.add('btn-outline-secondary');
+            ctx1.style.display="none";
+            ctx2.style.display="none";
+        }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"
         integrity="sha512-pUhApVQtLbnpLtJn6DuzDD5o2xtmLJnJ7oBoMsBnzOkVkpqofGLGPaBJ6ayD2zQe3lCgCibhJBi4cj5wAxwVKA=="
