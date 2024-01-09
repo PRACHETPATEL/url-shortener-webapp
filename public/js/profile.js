@@ -6,13 +6,18 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
+    const body=document.querySelector('.container');
+    const loader=document.getElementById('mainloader');
+    body.style.display="none";
+    loader.style.display="flex";
     await checkloginstatus();
     const profile=document.getElementById('profile');
     const profile1=document.getElementById('profile1');
     const profile2=document.getElementById('profile2');
     const profile3=document.getElementById('profile3');
-    const profilecard=document.getElementById('profilecard');
-    const name=document.getElementById('name');
+    
+    // const profilecard=document.getElementById('profilecard');
+    // const name=document.getElementById('name');
     const username=document.getElementById('username');
     const namex=document.getElementById('namex');
     const usernamex=document.getElementById('usernamex');
@@ -31,8 +36,8 @@ window.addEventListener('load',async ()=>{
     profile2.src="../images/profiles/"+user.data.profile.profile;
     profile3.src="../images/profiles/"+user.data.profile.profile;
     
-    profilecard.style.backgroundImage="url('../images/profiles/"+user.data.profile.profile+"')";
-    name.innerText="Hi, "+user.data.profile.fullname;
+    // profilecard.style.backgroundImage="url('../images/profiles/"+user.data.profile.profile+"')";
+    // name.innerText="Hi, "+user.data.profile.fullname;
     username.innerText=user.data.profile.username;
     email.innerText=user.data.profile.email;
     namex.value=user.data.profile.fullname;
@@ -65,6 +70,8 @@ window.addEventListener('load',async ()=>{
         profilepics.innerHTML=profilepicshtml;
     }
     loadProfiles();
+    body.style.display="block";
+    loader.style.display="none";
     window.selectProfile=(id)=>{
         // console.log(id);
         const unactive=document.querySelector(".active");

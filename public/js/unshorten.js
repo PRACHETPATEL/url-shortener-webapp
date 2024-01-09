@@ -6,7 +6,13 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
+    const body=document.querySelector('.container');
+    const loader=document.getElementById('mainloader');
+    body.style.display="none";
+    loader.style.display="flex";
     await checkloginstatus();
+    body.style.display="block";
+    loader.style.display="none";
     const form=document.getElementById("urlform");
     let url_list=document.getElementById("urls");
     const sidebar=document.getElementById("sidebar");

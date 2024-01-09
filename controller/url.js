@@ -230,7 +230,6 @@ const getStats=asyncHandler(async(req,res)=>{
     return;
   }
   const urlmetadata=await UrlMetadata.find({url_id:req.params.id});
-  console.log(urlmetadata);
   if(urlmetadata.length===0){
     res.json({status:404,message:"Url Not Found!!"});
     return;

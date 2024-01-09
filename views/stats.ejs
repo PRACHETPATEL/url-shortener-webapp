@@ -119,8 +119,8 @@
             </div>
         </nav>
         <div class="container  text-white d-flex flex-column flex-lg-row justify-content-center al w-100 my-5">
-            <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap" ><div id="shorturl" style="font-size: 1.2rem;"></div> <div class="d-flex flex-wrap w-50" ><a  target="_blank" id="longurl" href="#" style="white-space: wrap;text-overflow:inherit;" class="nav-item"></a></div></div>
-            <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap">
+            <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap p-1" style="background-color: #2F2F33;"><div id="shorturl" style="font-size: 1.2rem;"></div> <div class="d-flex flex-wrap w-50" ><a  target="_blank" id="longurl" href="#" style="white-space: wrap;text-overflow:inherit;" class="nav-item"></a></div></div>
+            <div class="col-lg-3 d-flex flex-column justify-content-between mb-3 flex-wrap p-1" style="background-color: #2F2F33;">
                 <div class="w-100 d-flex  justify-content-lg-end  gap-4"><i class="nav-item fa-solid fa-qrcode" title="generate QRcode" onclick=generateQR()  style="font-size: 1.5rem;"></i><i class="nav-item fa-solid fa-copy" title="Copy Short URL" onclick=copyUrl() style="font-size: 1.5rem;"></i>  <a id="shorturl2" target="_blank" href="#" class="nav-item"><i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 1.5rem;"></i></a></div>
                 <div class="w-100 d-flex flex-column flex-lg-row mt-2 justify-content-lg-between  gap-2"><div id="totalvisits"></div><div id="lastvisit"></div></div>
             </div>
@@ -139,6 +139,16 @@
                 <a href="https://www.linkedin.com/in/prachet-patel-6150a3264" target="_blank" style="height: 40px;width: 40px;" class="nav-item "><i class="fa-brands fa-linkedin" style="font-size: 40px;"></i></a>
             </div>
         </div>
+    </div>
+    <div id="mainloader" class="container justify-content-center align-items-center" style="height: 100vh;display: none;">
+        <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+         </div>
     </div>
     <script>
         window.addEventListener("pageshow", function (event) {

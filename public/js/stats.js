@@ -7,6 +7,10 @@ let checkloginstatus=async()=>{
 }
 window.addEventListener('load',async ()=>{
     await checkloginstatus();
+    const body=document.querySelector('.container');
+    const loader=document.getElementById('mainloader');
+    body.style.display="none";
+    loader.style.display="flex";
     const ctx = document.getElementById('myChart');
     const sidebar=document.getElementById("sidebar");
     const profile=document.getElementById('profile');
@@ -84,6 +88,8 @@ window.addEventListener('load',async ()=>{
         document.getElementById("shorturl").innerText=shorturl;
         if(longurl.length>=36){
             document.getElementById("longurl").innerText=longurl.substring(0,36)+"...";
+        }else{
+            document.getElementById("longurl").innerText=longurl;
         }
         document.getElementById("longurl").href=longurl;
         document.getElementById("shorturl2").href=shorturl;
@@ -93,9 +99,11 @@ window.addEventListener('load',async ()=>{
         }else{
             document.getElementById("lastvisit").innerText="Last Visit: "+last_visit_time +" ago";
         }
-        displayBarGraph(0,['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], week_visits)
+        displayBarGraph(0,['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], week_visits);
+        body.style.display="block";
+        loader.style.display="none";
     }else if(response.data.status===400||response.data.status===404){
-        window.location.href="../../client/home"
+        window.location.href="../../client/dashboard"
     }
     window.generateQR=()=>{
         const myModal = new bootstrap.Modal(document.getElementById('qrModal'), focus);

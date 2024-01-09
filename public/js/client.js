@@ -6,6 +6,10 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
+    const body=document.querySelector('.container');
+    const loader=document.getElementById('mainloader');
+    body.style.display="none";
+    loader.style.display="flex";
     await checkloginstatus();
     const api=location.protocol+"//"+ location.hostname+":"+location.port;
     const form=document.getElementById("urlform");
@@ -50,7 +54,8 @@ window.addEventListener('load',async ()=>{
     }
     }
     displayUrlList();
-    
+    body.style.display="block";
+    loader.style.display="none";
     let showSnackBar=(alert,message,backgroundColor)=>{
         let x = document.getElementById("snackbar");
         x.className="show "+alert;

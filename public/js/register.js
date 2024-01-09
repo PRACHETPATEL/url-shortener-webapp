@@ -6,7 +6,13 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
+    const body=document.querySelector('.container');
+    const loader=document.getElementById('mainloader');
+    body.style.display="none";
+    loader.style.display="flex";
     await checkloginstatus();
+    body.style.display="block";
+    loader.style.display="none";
     const sidebar=document.getElementById("sidebar");
     let showSnackBar=(alert,message,backgroundColor)=>{
         let x = document.getElementById("snackbar");
@@ -37,7 +43,11 @@ window.addEventListener('load',async ()=>{
     const repassword=document.getElementById("repassword");
     form.addEventListener('submit',async (e)=>{
         e.preventDefault();
+        body.style.display="none";
+        loader.style.display="flex";
         let response=await axios.post(api+"/api/user/register",{username:username.value,fullname:fullname.value,email:email.value,password:password.value});
+        body.style.display="block";
+        loader.style.display="none";
         if(response.data.status===200){
             username.value="";
             fullname.value="";

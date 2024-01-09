@@ -6,6 +6,10 @@ let checkloginstatus=async()=>{
     }
 }
 window.addEventListener('load',async ()=>{
+    const body=document.querySelector('.container');
+    const loader=document.getElementById('mainloader');
+    body.style.display="none";
+    loader.style.display="flex";
     await checkloginstatus();
     let urls;
     const profile=document.getElementById('profile');
@@ -92,6 +96,8 @@ window.addEventListener('load',async ()=>{
     }
     }
     displayUrlList();
+    body.style.display="block";
+    loader.style.display="none";
    window.hideUpdateUrl=(id)=>{
     document.getElementById(id).style.display="none"
    }
@@ -116,21 +122,28 @@ window.addEventListener('load',async ()=>{
     window.updateUrl=(id,input)=>{
         let checkx=document.getElementById(input).value;
         document.getElementById(input).value="";
+
+        body.style.display="none";
+        loader.style.display="flex";
         if(checkx&&checkx.length>=6){
             axios.put(api+"/api/url/"+id,{url:checkx}).then((response)=>{
                 if(response.data.status===202){
                     showSnackBar("alert-success",`<i class="fa-solid fa-check-double "></i> URL updated <br> Successfully!!`,"#198754a4");
                     displayUrlList();
+      
                     hideUpdateUrl("update-"+input.slice(0,-1))
                 }else if(response.data.status===400){
                     showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i> "+response.data.message,"#dc354696");
                 }else{
                     showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i>  Something went wrong...","#dc354696");
-                }
+                }        
             })
         }else{
             showSnackBar("alert-danger","<i class='fa-solid fa-bomb  '></i>  URL IS TOO SHORT!!","#dc354696");
         }
+        
+        body.style.display="block";
+        loader.style.display="none";
     }
     window.generateQR=(id,url)=>{
         const myModal = new bootstrap.Modal(document.getElementById('qrModal'), focus);
