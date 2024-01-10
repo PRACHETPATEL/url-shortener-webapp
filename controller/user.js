@@ -139,6 +139,10 @@ const resetPassword=asyncHandler(async (req,res)=>{
   const {currentpassword,password,retypepassword}=req.body;
   let passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[_@#$])(?=.*\d).{8,}$/;
   const user=await User.findById(req.user.id);
+  if(user.username==="testuser"){
+    res.json({status:400, message: 'Cannot Change <br> Test User <br> Password!!' });
+    return; 
+  }
   if(await bcrypt.compare(currentpassword,user.password)){
     console.log(currentpassword);
     console.log(password);

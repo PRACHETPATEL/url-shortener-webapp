@@ -162,7 +162,7 @@ const updateShortenUrl = asyncHandler(async (req, res) => {
     }
     const updatedurl = await Url.findByIdAndUpdate(
       req.params.id,
-      { url: url },
+      { url: url,visits:0},
       {
         new: true
       }
@@ -241,8 +241,8 @@ const getStats=asyncHandler(async(req,res)=>{
   let lastvisit= moment.duration(difference).humanize();
   const thisWeekVisitsWithDays = [0,0,0,0,0,0,0];// start from sunday
   const visitspercentageperdays = [0,0,0,0,0,0,0];// start from sunday
-  const hours = new Array(25).fill(0); //start from sunday
-  const months = new Array(12).fill(0); //start from sunday
+  const hours = new Array(24).fill(0); //start from sunday
+  const months = new Array(11).fill(0); //start from sunday
   urlmetadata.forEach(data => {
     const dateMoment = moment(data.date);
      if(dateMoment.isSame(date, 'week')){
@@ -253,13 +253,11 @@ const getStats=asyncHandler(async(req,res)=>{
   urlstatistic.forEach(data=>{
     const dateMoment = moment(data.date);
     visitspercentageperdays[dateMoment.day()]+=1;  
-    if(date.diff(dateMoment, 'hours') <= 23){
-      hours[dateMoment.hour()]+=1;
-      hours[24]=dateMoment.hour();
+    if(dateMoment.isSame(date, 'day')){
+      hours[parseInt(dateMoment.hour()+5.50)]+=1;
     }
     if(date.diff(dateMoment, 'months') <= 11){
       months[dateMoment.month()]+=1;
-      months[12]=dateMoment.month();
     }
   })
   res.json({status:200,message:"Stats Fetched",total_visits:url.visits,last_visit_time:lastvisit,week_visits:thisWeekVisitsWithDays,visits_percent_days:visitspercentageperdays,visits_per_hour:hours,visits_per_month:months,longurl:url.url,shorturl:url.shortened_url});
