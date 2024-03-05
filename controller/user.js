@@ -67,7 +67,7 @@ const loginUser = asyncHandler(async (req, res) => {
         user: {
           id:user.id
         },
-      },process.env.ACCESS_TOKEN_SECERT,{expiresIn:"1440m"});
+      },process.env.ACCESS_TOKEN_SECERT,{expiresIn:"14400m"});
       // console.log(accessToken);
       res.cookie('token',accessToken,{ maxAge: 864000000, httpOnly: true });
       res.cookie('logged_in',{"value":"yes"},{ maxAge: 864000000, httpOnly: true  }); 
@@ -98,7 +98,7 @@ const loginUser = asyncHandler(async (req, res) => {
           user: {
             id:user.id
           },
-        },process.env.ACCESS_TOKEN_SECERT,{expiresIn:"1440m"});
+        },process.env.ACCESS_TOKEN_SECERT,{expiresIn:"14400m"});
         console.log(accessToken);
         res.cookie('token',accessToken,{ maxAge: 864000000, httpOnly: true  });  
         res.cookie('logged_in',{"value":"yes"},{ maxAge: 864000000, httpOnly: true  });  

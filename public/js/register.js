@@ -1,11 +1,12 @@
-const api=location.protocol+"//"+ location.hostname+":"+location.port;
+
+window.addEventListener('load',async ()=>{
+    const api=location.protocol+"//"+ location.hostname+":"+location.port;
 let checkloginstatus=async()=>{
     const check=await axios.get(api+"/api/user/getloginstatus");
     if(check.data.status==200){
         window.location.href=api+"/client/dashboard";
     }
 }
-window.addEventListener('load',async ()=>{
     const body=document.querySelector('.container');
     const loader=document.getElementById('mainloader');
     body.style.display="none";
